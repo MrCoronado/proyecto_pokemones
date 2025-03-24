@@ -2,8 +2,8 @@ package models.pokemones;
 
 import models.ataques.Ataque;
 
-public abstract class Pokemon {
-    public enum TipoPokemon { 
+public abstract class Pokemon { 
+    public enum TipoPokemon { //Enum de los tipos de pokemones
         AGUA,
         FUEGO,
         PLANTA,
@@ -48,14 +48,6 @@ public abstract class Pokemon {
         this.ataques = ataques;
     }
 
-<<<<<<< HEAD
-    public abstract void atacar(Pokemon enemigo);
-    
-
-
-    
-}
-=======
     public TipoPokemon getTipo() {
         return tipo;
     }
@@ -98,4 +90,3 @@ public abstract class Pokemon {
 }
 
 
->>>>>>> Jsperez
