@@ -72,6 +72,7 @@ public abstract class Pokemon {
                (atacante == TipoPokemon.AGUA && defensor == TipoPokemon.FUEGO) ||
                (atacante == TipoPokemon.PLANTA && defensor == TipoPokemon.AGUA) ||
                (atacante == TipoPokemon.ELECTRICO && defensor == TipoPokemon.AGUA);
+
     }
     //Metodo recibir dano
     public void recibirDanio(int danio) {
