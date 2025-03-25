@@ -19,33 +19,20 @@ public class Ataque {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public int getDano() {
         return dano;
-    }
-
-    public void setDano(int dano) {
-        this.dano = dano;
     }
 
     public String getTipoDanio() {
         return tipoDanio;
     }
 
-    public void setTipoDanio(String tipoDanio) {
-        this.tipoDanio = tipoDanio;
-    }
-
     public String getTipoAtaque() {
         return tipoAtaque;
     }
 
-    public void setTipoAtaque(String tipoAtaque) {
-        this.tipoAtaque = tipoAtaque;
+    public void aplicarAtaque(Pokemon objetivo) {
+        System.out.println(objetivo.getNombre() + " recibe " + dano + " de daño por " + nombre);
+        objetivo.recibirDanio(dano);
     }
-
-    
 }

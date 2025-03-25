@@ -34,15 +34,25 @@ public class Entrenador {
 
     public Pokemon elegirPokemon(int indice) {
         if (indice >= 0 && indice < equipo.size()) {
-            return equipo.get(indice);
+            Pokemon seleccionado = equipo.get(indice);
+            if (seleccionado.getPuntos_de_salud() > 0) {
+                return seleccionado;
+            } else {
+                System.out.println(seleccionado.getNombre() + " está debilitado. Elige otro Pokémon.");
+                return null;
+            }
         } else {
             System.out.println("Selección inválida.");
             return null;
         }
     }
-    
+
     public boolean equipoDerrotado() {
+        actualizarEquipo(); // Elimina Pokémon con 0 HP
         return equipo.isEmpty();
     }
-}
 
+    private void actualizarEquipo() {
+        equipo.removeIf(pokemon -> pokemon.getPuntos_de_salud() <= 0);
+    }
+}

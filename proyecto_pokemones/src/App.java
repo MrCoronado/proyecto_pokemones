@@ -13,13 +13,14 @@ public class App {
         Ataque lanzallamas = new Ataque("Lanzallamas", 10, "Especial", "Fuego");
         Ataque trueno = new Ataque("Trueno", 10, "Especial", "Electrico");
         Ataque hidrobomba = new Ataque("Hidrobomba", 10, "Especial", "Agua");
+        
 
-        // Pokemones
+        // Pokemones con listas de ataques
         Pokemon[] disponibles = {
-            new PokemonPlanta("Roselia", 100, 10, latigoCepa),
-            new PokemonFuego("Charmander", 100, 10, lanzallamas),
-            new PokemonElectrico("Pikachu", 100, 10, trueno),
-            new PokemonAgua("Squirtle", 100, 10, hidrobomba)
+            new PokemonPlanta("Roselia", 100, List.of(latigoCepa)),
+            new PokemonFuego("Charmander", 100, List.of(lanzallamas)),
+            new PokemonElectrico("Pikachu", 100, List.of(trueno)),
+            new PokemonAgua("Squirtle", 100, List.of(hidrobomba))
         };
 
         System.out.print("Ingresa el nombre del primer entrenador: ");
@@ -35,6 +36,7 @@ public class App {
         System.out.println("2. Aleatorio");
         System.out.print("Opción: ");
         int opcion = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer
 
         if (opcion == 1) {
             System.out.println("Selecciona tus Pokémon (máximo 3):");
@@ -45,6 +47,7 @@ public class App {
             while (jugador.getEquipo().size() < 3) {
                 System.out.print("Ingresa el número de un Pokémon: ");
                 int eleccion = scanner.nextInt();
+                scanner.nextLine(); // Limpiar buffer después de nextInt()
                 if (eleccion >= 1 && eleccion <= disponibles.length) {
                     jugador.agregarPokemon(crearNuevoPokemon(disponibles[eleccion - 1]));
                 } else {
@@ -72,10 +75,19 @@ public class App {
             System.out.println(rival.getNombre() + ": " + pokemonRival.getNombre() + " (HP: " + pokemonRival.getPuntos_de_salud() + ")\n");
 
             // Turno del jugador
-            System.out.println("Turno de " + pokemonJugador.getNombre() + ": Presiona ENTER para atacar...");
-            scanner.nextLine();
-            scanner.nextLine();
-            pokemonJugador.atacar(pokemonRival);
+            System.out.println("Turno de " + pokemonJugador.getNombre() + ": Elige un ataque:");
+            for (int i = 0; i < pokemonJugador.getAtaques().size(); i++) {
+                System.out.println((i + 1) + ". " + pokemonJugador.getAtaques().get(i).getNombre());
+            }
+            System.out.print("Opción: ");
+            int ataqueJugador = scanner.nextInt() - 1;
+            scanner.nextLine(); // Limpiar buffer
+
+            if (ataqueJugador >= 0 && ataqueJugador < pokemonJugador.getAtaques().size()) {
+                pokemonJugador.atacar(pokemonRival, ataqueJugador);
+            } else {
+                System.out.println("Selección inválida. Se pierde el turno.");
+            }
 
             if (pokemonRival.getPuntos_de_salud() <= 0) {
                 System.out.println("\n" + pokemonRival.getNombre() + " ha sido derrotado.");
@@ -90,7 +102,8 @@ public class App {
 
             // Turno del rival
             System.out.println("\nTurno de " + pokemonRival.getNombre() + ":");
-            pokemonRival.atacar(pokemonJugador);
+            int ataqueRival = random.nextInt(pokemonRival.getAtaques().size());
+            pokemonRival.atacar(pokemonJugador, ataqueRival);
 
             if (pokemonJugador.getPuntos_de_salud() <= 0) {
                 System.out.println("\n" + pokemonJugador.getNombre() + " ha sido derrotado.");
@@ -101,7 +114,17 @@ public class App {
                         System.out.println((i + 1) + ". " + jugador.getEquipo().get(i).getNombre());
                     }
                     System.out.print("Opción: ");
-                    pokemonJugador = jugador.getEquipo().get(scanner.nextInt() - 1);
+                    int nuevoPokemon = scanner.nextInt() - 1;
+                    scanner.nextLine(); // Limpiar buffer
+
+                    while (nuevoPokemon < 0 || nuevoPokemon >= jugador.getEquipo().size()) {
+                        System.out.println("Selección inválida. Intenta de nuevo.");
+                        System.out.print("Opción: ");
+                        nuevoPokemon = scanner.nextInt() - 1;
+                        scanner.nextLine();
+                    }
+                    
+                    pokemonJugador = jugador.getEquipo().get(nuevoPokemon);
                     System.out.println(jugador.getNombre() + " envía a " + pokemonJugador.getNombre() + " a la batalla.");
                 }
             }
@@ -116,24 +139,14 @@ public class App {
         scanner.close();
     }
 
-    
-    /*
-     * Este metodo funciona como solucion al problema cuando pelean dos pokemones iguales 
-     * (crea otra instancia del pokemon y java los toma como diferente para que no se hagan el doble de daño)
-     */
     public static Pokemon crearNuevoPokemon(Pokemon original) {
         return switch (original.getTipo()) {
-            case AGUA -> new PokemonAgua(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
-                    new Ataque(original.getAtaque().getNombre(), original.getAtaque().getDano(), original.getAtaque().getTipoDanio(), original.getAtaque().getTipoAtaque()));
-            case FUEGO -> new PokemonFuego(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
-                    new Ataque(original.getAtaque().getNombre(), original.getAtaque().getDano(), original.getAtaque().getTipoDanio(), original.getAtaque().getTipoAtaque()));
-            case PLANTA -> new PokemonPlanta(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
-                    new Ataque(original.getAtaque().getNombre(), original.getAtaque().getDano(), original.getAtaque().getTipoDanio(), original.getAtaque().getTipoAtaque()));
-            case ELECTRICO -> new PokemonElectrico(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
-                    new Ataque(original.getAtaque().getNombre(), original.getAtaque().getDano(), original.getAtaque().getTipoDanio(), original.getAtaque().getTipoAtaque()));
+            case AGUA -> new PokemonAgua(original.getNombre(), original.getPuntos_de_salud(), new ArrayList<>(original.getAtaques()));
+            case FUEGO -> new PokemonFuego(original.getNombre(), original.getPuntos_de_salud(), new ArrayList<>(original.getAtaques()));
+            case PLANTA -> new PokemonPlanta(original.getNombre(), original.getPuntos_de_salud(), new ArrayList<>(original.getAtaques()));
+            case ELECTRICO -> new PokemonElectrico(original.getNombre(), original.getPuntos_de_salud(), new ArrayList<>(original.getAtaques()));
+            case HIELO -> new PokemonHielo(original.getNombre(), original.getPuntos_de_salud(), new ArrayList<>(original.getAtaques()));
+            case TIERRA -> new PokemonTierra(original.getNombre(), original.getPuntos_de_salud(), new ArrayList<>(original.getAtaques()));
         };
     }
 }
-
-
-
