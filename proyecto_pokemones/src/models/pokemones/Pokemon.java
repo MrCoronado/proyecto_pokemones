@@ -68,11 +68,12 @@ public abstract class Pokemon {
 
     // Ventajas de tipo
     public static boolean tieneVentaja(TipoPokemon atacante, TipoPokemon defensor) {
-        return (atacante == TipoPokemon.FUEGO && defensor == TipoPokemon.PLANTA) ||
-               (atacante == TipoPokemon.AGUA && defensor == TipoPokemon.FUEGO) ||
-               (atacante == TipoPokemon.PLANTA && defensor == TipoPokemon.AGUA) ||
-               (atacante == TipoPokemon.ELECTRICO && defensor == TipoPokemon.AGUA);
-
+        return (atacante == TipoPokemon.FUEGO && (defensor == TipoPokemon.PLANTA || defensor == TipoPokemon.HIELO)) ||
+               (atacante == TipoPokemon.AGUA && (defensor == TipoPokemon.FUEGO || defensor == TipoPokemon.TIERRA)) ||
+               (atacante == TipoPokemon.PLANTA && (defensor == TipoPokemon.AGUA || defensor == TipoPokemon.TIERRA)) ||
+               (atacante == TipoPokemon.ELECTRICO && (defensor == TipoPokemon.AGUA || defensor == TipoPokemon.HIELO)) ||
+               (atacante == TipoPokemon.HIELO && (defensor == TipoPokemon.PLANTA || defensor == TipoPokemon.TIERRA)) ||
+               (atacante == TipoPokemon.TIERRA && (defensor == TipoPokemon.FUEGO || defensor == TipoPokemon.ELECTRICO));
     }
     //Metodo recibir dano
     public void recibirDanio(int danio) {
