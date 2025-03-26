@@ -3,8 +3,8 @@ import models.ataques.Ataque;
 import java.util.List;
 import java.util.ArrayList;
 
-public abstract class Pokemon {
-    public enum TipoPokemon { 
+public abstract class Pokemon { 
+    public enum TipoPokemon { //Enum de los tipos de pokemones
         AGUA,
         FUEGO,
         PLANTA,

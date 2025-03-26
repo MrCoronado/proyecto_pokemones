@@ -1,5 +1,4 @@
 package models.ataques;
-
 import models.pokemones.Pokemon;
 
 public class Ataque {
