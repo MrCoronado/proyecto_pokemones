@@ -1,27 +1,28 @@
 package models.pokemones;
-
 import models.ataques.Ataque;
+import java.util.List;
+import java.util.ArrayList;
 
 public abstract class Pokemon { 
     public enum TipoPokemon { //Enum de los tipos de pokemones
         AGUA,
         FUEGO,
         PLANTA,
-        ELECTRICO;
+        ELECTRICO,
+        HIELO,
+        TIERRA;
     }
 
     protected String nombre;
     protected int puntos_de_salud;
-    protected int ataques;
     protected TipoPokemon tipo;
-    protected Ataque ataque;
-
-    public Pokemon(String nombre, int puntos_de_salud, int ataques, TipoPokemon tipo, Ataque ataque) {
-        this.nombre = nombre;
-        this.puntos_de_salud = puntos_de_salud;
-        this.ataques = ataques;
-        this.tipo = tipo;
-        this.ataque = ataque;
+    protected List<Ataque> ataques = new ArrayList<>();
+    
+    public Pokemon(String nombre, int puntos_de_salud, TipoPokemon tipo, List<Ataque> ataques) {
+            this.nombre = nombre;
+            this.puntos_de_salud = puntos_de_salud;
+            this.tipo = tipo;
+            this.ataques = ataques;
     }
 
     public String getNombre() {
@@ -40,52 +41,55 @@ public abstract class Pokemon {
         this.puntos_de_salud = puntos_de_salud;
     }
 
-    public int getAtaques() {
+    public List<Ataque> getAtaques() {
         return ataques;
-    }
-
-    public void setAtaques(int ataques) {
-        this.ataques = ataques;
     }
 
     public TipoPokemon getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoPokemon tipo) {
-        this.tipo = tipo;
+    public void setAtaques(List<Ataque> ataques) {
+        this.ataques = ataques;
     }
 
-    public Ataque getAtaque() {
-        return ataque;
-    }
-
-    public void setAtaque(Ataque ataque) {
-        this.ataque = ataque;
-    }
-
-
-    public void atacar(Pokemon enemigo) {
-        int danioFinal = calcularDanio(enemigo);
-        System.out.println(nombre + " ataca a " + enemigo.getNombre() + " con " + ataque.getNombre() +
-                ", causando " + danioFinal + " puntos de daño.");
+    public void atacar(Pokemon enemigo, int indice) {
+        if (indice < 0 || indice >= ataques.size()) {
+            System.out.println("Índice de ataque inválido.");
+            return;
+        }
+        Ataque ataqueSeleccionado = ataques.get(indice);
+        int danioFinal = calcularDanio(ataqueSeleccionado, enemigo);
+        
+        System.out.println(nombre + " ataca a " + enemigo.getNombre() + " con " + ataqueSeleccionado.getNombre() +
+            ", causando " + danioFinal + " puntos de daño.");
         enemigo.setPuntos_de_salud(enemigo.getPuntos_de_salud() - danioFinal);
     }
 
     // Ventajas de tipo
     public static boolean tieneVentaja(TipoPokemon atacante, TipoPokemon defensor) {
-        return (atacante == TipoPokemon.FUEGO && defensor == TipoPokemon.PLANTA) ||
-               (atacante == TipoPokemon.AGUA && defensor == TipoPokemon.FUEGO) ||
-               (atacante == TipoPokemon.PLANTA && defensor == TipoPokemon.AGUA) ||
-               (atacante == TipoPokemon.ELECTRICO && defensor == TipoPokemon.AGUA);
+        return (atacante == TipoPokemon.FUEGO && (defensor == TipoPokemon.PLANTA || defensor == TipoPokemon.HIELO)) ||
+               (atacante == TipoPokemon.AGUA && (defensor == TipoPokemon.FUEGO || defensor == TipoPokemon.TIERRA)) ||
+               (atacante == TipoPokemon.PLANTA && (defensor == TipoPokemon.AGUA || defensor == TipoPokemon.TIERRA)) ||
+               (atacante == TipoPokemon.ELECTRICO && (defensor == TipoPokemon.AGUA || defensor == TipoPokemon.HIELO)) ||
+               (atacante == TipoPokemon.HIELO && (defensor == TipoPokemon.PLANTA || defensor == TipoPokemon.TIERRA)) ||
+               (atacante == TipoPokemon.TIERRA && (defensor == TipoPokemon.FUEGO || defensor == TipoPokemon.ELECTRICO));
+    }
+    //Metodo recibir dano
+    public void recibirDanio(int danio) {
+        this.puntos_de_salud -= danio;
+        if (this.puntos_de_salud < 0) {
+            this.puntos_de_salud = 0; // No permitir valores negativos
+        }
     }
 
-    public int calcularDanio(Pokemon enemigo) {
+    // 🔹 Método faltante: calcular el daño del ataque
+    public int calcularDanio(Ataque ataqueSeleccionado, Pokemon enemigo) {
         double multiplicador = 1.0;
         if (tieneVentaja(this.tipo, enemigo.getTipo())) {
-            multiplicador = 1.3;
+            multiplicador = 1.3; // Daño extra si el tipo tiene ventaja
         }
-        return (int)(ataque.getDano() * multiplicador);
+        return (int)(ataqueSeleccionado.getDano() * multiplicador);
     }
 }
 
