@@ -4,7 +4,7 @@ import models.pokemones.Pokemon;
 public class Ataque {
     private String nombre;
     private int dano;
-    private String tipoDanio; // "Físico" o "Especial"
+    private String tipoDanio; // "Físico" y "Especial"
     private String tipoAtaque; // "Fuego", "Agua", etc.
 
     public Ataque(String nombre, int dano, String tipoDanio, String tipoAtaque) {

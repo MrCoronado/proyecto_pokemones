@@ -9,12 +9,12 @@ public class App {
         Random random = new Random();
 
         // Ataques
-        Ataque latigoCepa = new Ataque("Látigo Cepa", 10, "Físico", "Planta");
+        Ataque latigoCepa = new Ataque("Látigo Cepa", 10, "Especial", "Planta");
         Ataque lanzallamas = new Ataque("Lanzallamas", 10, "Especial", "Fuego");
         Ataque trueno = new Ataque("Trueno", 10, "Especial", "Electrico");
         Ataque hidrobomba = new Ataque("Hidrobomba", 10, "Especial", "Agua");
         Ataque rayoHielo = new Ataque("Rayo Hielo", 10, "Especial", "Hielo");
-        Ataque terremoto = new Ataque("Terremoto", 10, "Físico", "Tierra");
+        Ataque terremoto = new Ataque("Terremoto", 10, "Especial", "Tierra");
 
         // Pokemones con listas de ataques
         Pokemon[] disponibles = {
@@ -113,6 +113,10 @@ public class App {
 
     public static Pokemon crearNuevoPokemon(Pokemon original) {
         return switch (original.getTipo()) {
+
+            /*Este metodo funciona como solucion al problema cuando pelean dos pokmones iguales
+             * (crea otra instancia del pokemon y java los toma com difertentes para que no hagan doble daño)
+             */
             case PLANTA -> new PokemonPlanta(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
             case FUEGO -> new PokemonFuego(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
             case ELECTRICO -> new PokemonElectrico(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());

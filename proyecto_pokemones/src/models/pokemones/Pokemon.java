@@ -83,7 +83,7 @@ public abstract class Pokemon {
         }
     }
 
-    // 🔹 Método faltante: calcular el daño del ataque
+
     public int calcularDanio(Ataque ataqueSeleccionado, Pokemon enemigo) {
         double multiplicador = 1.0;
         if (tieneVentaja(this.tipo, enemigo.getTipo())) {
