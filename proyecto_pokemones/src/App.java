@@ -29,12 +29,12 @@ public class App {
         System.out.print("Ingresa el nombre del primer entrenador: ");
         String nombreJugador = scanner.nextLine();
         Entrenador jugador = new Entrenador(nombreJugador);
-        seleccionarEquipo(scanner, jugador, disponibles);
+        seleccionarEquipoAleatorio(jugador, disponibles);
 
         System.out.print("Ingresa el nombre del segundo entrenador: ");
         String nombreRival = scanner.nextLine();
         Entrenador rival = new Entrenador(nombreRival);
-        seleccionarEquipo(scanner, rival, disponibles);
+        seleccionarEquipoAleatorio(rival, disponibles);
 
         System.out.println("\n¡Comienza la batalla Pokémon!\n");
 
@@ -76,21 +76,23 @@ public class App {
         scanner.close();
     }
 
-    public static void seleccionarEquipo(Scanner scanner, Entrenador entrenador, Pokemon[] disponibles) {
-        System.out.println("\n" + entrenador.getNombre() + ", selecciona 3 Pokémon:");
-        for (int i = 0; i < disponibles.length; i++) {
-            System.out.println((i + 1) + ". " + disponibles[i].getNombre());
-        }
-        
+    public static void seleccionarEquipoAleatorio(Entrenador entrenador, Pokemon[] disponibles) {
+        List<Integer> indicesUsados = new ArrayList<>();
+        Random random = new Random();
+    
         while (entrenador.getEquipo().size() < 3) {
-            System.out.print("Ingresa el número de un Pokémon: ");
-            int eleccion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer después de nextInt()
-            if (eleccion >= 1 && eleccion <= disponibles.length) {
-                entrenador.agregarPokemon(crearNuevoPokemon(disponibles[eleccion - 1]));
-            } else {
-                System.out.println("Selección inválida.");
-            }
+            int indice;
+            do {
+                indice = random.nextInt(disponibles.length);
+            } while (indicesUsados.contains(indice));
+            indicesUsados.add(indice);
+    
+            entrenador.agregarPokemon(crearNuevoPokemon(disponibles[indice]));
+        }
+    
+        System.out.println(entrenador.getNombre() + " ha recibido su equipo aleatorio:");
+        for (Pokemon p : entrenador.getEquipo()) {
+            System.out.println("- " + p.getNombre());
         }
     }
 
