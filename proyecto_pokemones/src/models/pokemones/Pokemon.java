@@ -17,12 +17,22 @@ public abstract class Pokemon {
     protected int puntos_de_salud;
     protected TipoPokemon tipo;
     protected List<Ataque> ataques = new ArrayList<>();
+    protected int ataque;
+    protected int defensa;
+    protected int ataqueEspecial;
+    protected int defensaEspecial;
+    protected int velocidad;
     
-    public Pokemon(String nombre, int puntos_de_salud, TipoPokemon tipo, List<Ataque> ataques) {
+    public Pokemon(String nombre, int puntos_de_salud, TipoPokemon tipo, List<Ataque> ataques, int ataque, int defensa, int ataqueEspecial, int defensaEspecial, int velocidad) {
             this.nombre = nombre;
             this.puntos_de_salud = puntos_de_salud;
             this.tipo = tipo;
             this.ataques = ataques;
+            this.ataque = ataque;
+            this.defensa = defensa;
+            this.ataqueEspecial = ataqueEspecial;
+            this.defensaEspecial = defensaEspecial;
+            this.velocidad = velocidad;
     }
 
     public String getNombre() {
@@ -51,6 +61,46 @@ public abstract class Pokemon {
 
     public void setAtaques(List<Ataque> ataques) {
         this.ataques = ataques;
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    public int getDefensa() {
+        return defensa;
+    }
+
+    public void setDefensa(int defensa) {
+        this.defensa = defensa;
+    }
+
+    public int getAtaqueEspecial() {
+        return ataqueEspecial;
+    }
+
+    public void setAtaqueEspecial(int ataqueEspecial) {
+        this.ataqueEspecial = ataqueEspecial;
+    }
+
+    public int getDefensaEspecial() {
+        return defensaEspecial;
+    }
+
+    public void setDefensaEspecial(int defensaEspecial) {
+        this.defensaEspecial = defensaEspecial;
+    }
+
+    public int getVelocidad() {
+        return velocidad;
+    }
+
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
     }
 
     public void atacar(Pokemon enemigo, int indice) {
