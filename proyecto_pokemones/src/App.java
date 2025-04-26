@@ -47,16 +47,17 @@ public class App {
             System.out.println(jugador.getNombre() + ": " + pokemonJugador.getNombre() + " (HP: " + pokemonJugador.getPuntos_de_salud() + ")");
             System.out.println(rival.getNombre() + ": " + pokemonRival.getNombre() + " (HP: " + pokemonRival.getPuntos_de_salud() + ")\n");
 
-            ejecutarTurno(scanner, jugador.getNombre(), pokemonJugador, pokemonRival);
+            // Empieza el pokemon con mayor velocidad
+    if (pokemonJugador.getVelocidad() >= pokemonRival.getVelocidad()) {
+        ejecutarTurno(scanner, jugador.getNombre(), pokemonJugador, pokemonRival);
             if (pokemonRival.getPuntos_de_salud() <= 0) {
                 System.out.println("\n" + pokemonRival.getNombre() + " ha sido derrotado.");
                 rival.getEquipo().remove(pokemonRival);
                 if (!rival.equipoDerrotado()) {
                     System.out.println(rival.getNombre() + " envía a su próximo Pokémon.");
                 }
+                continue; // evitar que el pokemon derrotado contraataque
             }
-
-            if (rival.equipoDerrotado()) break;
 
             ejecutarTurno(scanner, rival.getNombre(), pokemonRival, pokemonJugador);
             if (pokemonJugador.getPuntos_de_salud() <= 0) {
@@ -66,7 +67,28 @@ public class App {
                     System.out.println(jugador.getNombre() + " envía a su próximo Pokémon.");
                 }
             }
+
+    }   else  {
+        ejecutarTurno(scanner, rival.getNombre(), pokemonRival, pokemonJugador);
+        if (pokemonJugador.getPuntos_de_salud() <= 0) {
+            System.out.println("\n" + pokemonJugador.getNombre() + " ha sido derrotado.");
+            jugador.getEquipo().remove(pokemonJugador);
+            if (!jugador.equipoDerrotado()) {
+                System.out.println(jugador.getNombre() + " envía a su próximo Pokémon.");
+            }
+            continue;
         }
+
+        ejecutarTurno(scanner, jugador.getNombre(), pokemonJugador, pokemonRival);
+        if (pokemonRival.getPuntos_de_salud() <= 0) {
+            System.out.println("\n" + pokemonRival.getNombre() + " ha sido derrotado.");
+            rival.getEquipo().remove(pokemonRival);
+            if (!rival.equipoDerrotado()) {
+                System.out.println(rival.getNombre() + " envía a su próximo Pokémon.");
+            }
+        }
+    }
+
 
         if (jugador.equipoDerrotado()) {
             System.out.println("\n¡" + rival.getNombre() + " gana la batalla!");
@@ -76,6 +98,7 @@ public class App {
 
         scanner.close();
     }
+}
 
     public static void seleccionarEquipoAleatorio(Entrenador entrenador, Pokemon[] disponibles) {
         List<Integer> indicesUsados = new ArrayList<>();
@@ -113,6 +136,7 @@ public class App {
             System.out.println("Selección inválida. Se pierde el turno.");
         }
     }
+
 
     /*Este metodo funciona como solucion al problema cuando pelean dos pokemones iguales
      * (crea otra instancia del pokemon y java los toma com difertentes para que no hagan doble daño)
