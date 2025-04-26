@@ -113,8 +113,9 @@ public abstract class Pokemon {
         
         System.out.println(nombre + " ataca a " + enemigo.getNombre() + " con " + ataqueSeleccionado.getNombre() +
             ", causando " + danioFinal + " puntos de daño.");
-        enemigo.setPuntos_de_salud(enemigo.getPuntos_de_salud() - danioFinal);
-    }
+            
+            enemigo.recibirDanio(danioFinal);
+        }
 
     // Ventajas de tipo
     public static boolean tieneVentaja(TipoPokemon atacante, TipoPokemon defensor) {
@@ -133,14 +134,36 @@ public abstract class Pokemon {
         }
     }
 
-
+    // Método para calcular el daño por ataque
     public int calcularDanio(Ataque ataqueSeleccionado, Pokemon enemigo) {
-        double multiplicador = 1.0;
-        if (tieneVentaja(this.tipo, enemigo.getTipo())) {
-            multiplicador = 1.3; // Daño extra si el tipo tiene ventaja
+        int nivel = 50;
+        int potencia = ataqueSeleccionado.getDano();
+    
+        // Stats correspondientes según el tipo de ataque
+        int statAtaque, statDefensa;  
+        if (ataqueSeleccionado.getTipoDanio().equalsIgnoreCase("Fisico")) { 
+            statAtaque = this.ataque; 
+            statDefensa = enemigo.defensa; 
+        } else { 
+            statAtaque = this.ataqueEspecial;
+            statDefensa = enemigo.defensaEspecial;
         }
-        return (int)(ataqueSeleccionado.getDano() * multiplicador);
+    
+        // Fórmula base de daño
+        double baseDanio = (((2 * nivel / 5.0 + 2) * potencia * ((double)statAtaque / statDefensa)) / 50.0) + 2; 
+    
+        // Multiplicador de ventaja de tipo
+        double multiplicador = 1.0; // 1.0 (sin ventaja)
+        if (tieneVentaja(this.tipo, enemigo.getTipo())) {
+            multiplicador = 1.3; // Aumenta el daño en un 30%
+            System.out.println("¡Es súper efectivo!"); 
+        } else if (tieneVentaja(enemigo.getTipo(), this.tipo)) {
+            multiplicador = 0.7; // Reduce el daño en un 30%
+            System.out.println("No es muy efectivo...");
+        }
+    
+        return (int)(baseDanio * multiplicador);
     }
+    
 }
-
 
