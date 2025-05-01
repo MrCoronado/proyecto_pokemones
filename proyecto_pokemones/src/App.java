@@ -6,7 +6,7 @@ import java.util.*;
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
+        
 
         // Ataques
         Ataque latigoCepa = new Ataque("Látigo Cepa", 10, "Especial", "Planta");

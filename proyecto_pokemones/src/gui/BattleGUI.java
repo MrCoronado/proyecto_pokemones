@@ -7,7 +7,6 @@ import models.pokemones.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,13 +23,22 @@ public class BattleGUI extends JFrame {
     private Pokemon[] disponibles;
 
     public BattleGUI() {
-        setTitle("Batalla Pokémon");
-        setSize(600, 500);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        try {
+            setTitle("Batalla Pokémon");
+            setSize(600, 500);
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
 
-        initUI();
-        inicializarPokemonesDisponibles();
+            System.out.println("Inicializando la interfaz gráfica...");
+
+            initUI();
+            inicializarPokemonesDisponibles();
+
+            System.out.println("BattleGUI se ha inicializado correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al inicializar la interfaz: " + e.getMessage());
+        }
     }
 
     private void initUI() {
@@ -61,91 +69,107 @@ public class BattleGUI extends JFrame {
         ataquePanel = new JPanel();
         add(ataquePanel, BorderLayout.SOUTH);
 
-        iniciarButton.addActionListener(e -> iniciarBatalla());
+        iniciarButton.addActionListener(_ -> iniciarBatalla());
     }
 
     private void inicializarPokemonesDisponibles() {
-        Ataque latigoCepa = new Ataque("Látigo Cepa", 10, "Especial", "Planta");
-        Ataque lanzallamas = new Ataque("Lanzallamas", 10, "Especial", "Fuego");
-        Ataque trueno = new Ataque("Trueno", 10, "Especial", "Electrico");
-        Ataque hidrobomba = new Ataque("Hidrobomba", 10, "Especial", "Agua");
-        Ataque rayoHielo = new Ataque("Rayo Hielo", 10, "Especial", "Hielo");
-        Ataque terremoto = new Ataque("Terremoto", 10, "Especial", "Tierra");
+        try {
+            Ataque latigoCepa = new Ataque("Látigo Cepa", 10, "Especial", "Planta");
+            Ataque lanzallamas = new Ataque("Lanzallamas", 10, "Especial", "Fuego");
+            Ataque trueno = new Ataque("Trueno", 10, "Especial", "Electrico");
+            Ataque hidrobomba = new Ataque("Hidrobomba", 10, "Especial", "Agua");
+            Ataque rayoHielo = new Ataque("Rayo Hielo", 10, "Especial", "Hielo");
+            Ataque terremoto = new Ataque("Terremoto", 10, "Especial", "Tierra");
 
-        disponibles = new Pokemon[]{
-            new PokemonPlanta("Roselia", 100, List.of(latigoCepa), 50, 45, 65, 50, 60),
-            new PokemonFuego("Charmander", 100, List.of(lanzallamas), 52, 43, 60, 50, 65),
-            new PokemonElectrico("Pikachu", 100, List.of(trueno), 55, 40, 50, 50, 90),
-            new PokemonAgua("Squirtle", 100, List.of(hidrobomba), 48, 65, 50, 64, 43),
-            new PokemonHielo("Articuno", 100, List.of(rayoHielo), 85, 100, 95, 125, 85),
-            new PokemonTierra("Garchomp", 100, List.of(terremoto), 130, 95, 80, 85, 102)
-        };
+            disponibles = new Pokemon[]{
+                new PokemonPlanta("Roselia", 100, List.of(latigoCepa), 50, 45, 65, 50, 60),
+                new PokemonFuego("Charmander", 100, List.of(lanzallamas), 52, 43, 60, 50, 65),
+                new PokemonElectrico("Pikachu", 100, List.of(trueno), 55, 40, 50, 50, 90),
+                new PokemonAgua("Squirtle", 100, List.of(hidrobomba), 48, 65, 50, 64, 43),
+                new PokemonHielo("Articuno", 100, List.of(rayoHielo), 85, 100, 95, 125, 85),
+                new PokemonTierra("Garchomp", 100, List.of(terremoto), 130, 95, 80, 85, 102)
+            };
+
+            System.out.println("Pokémon disponibles inicializados correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al inicializar los Pokémon: " + e.getMessage());
+        }
     }
 
     private void iniciarBatalla() {
-        String nombre1 = entrenador1Field.getText().trim();
-        String nombre2 = entrenador2Field.getText().trim();
+        try {
+            String nombre1 = entrenador1Field.getText().trim();
+            String nombre2 = entrenador2Field.getText().trim();
 
-        if (nombre1.isEmpty() || nombre2.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingresa los nombres de ambos entrenadores.");
-            return;
+            if (nombre1.isEmpty() || nombre2.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingresa los nombres de ambos entrenadores.");
+                return;
+            }
+
+            entrenador1 = new Entrenador(nombre1);
+            entrenador2 = new Entrenador(nombre2);
+
+            seleccionarEquipoAleatorio(entrenador1);
+            seleccionarEquipoAleatorio(entrenador2);
+
+            logArea.setText("");
+            log("¡Comienza la batalla Pokémon entre " + nombre1 + " y " + nombre2 + "!\n");
+
+            mostrarOpcionesDeAtaque();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al iniciar la batalla: " + e.getMessage());
         }
-
-        entrenador1 = new Entrenador(nombre1);
-        entrenador2 = new Entrenador(nombre2);
-
-        seleccionarEquipoAleatorio(entrenador1);
-        seleccionarEquipoAleatorio(entrenador2);
-
-        logArea.setText("");
-        log("¡Comienza la batalla Pokémon entre " + nombre1 + " y " + nombre2 + "!\n");
-
-        mostrarOpcionesDeAtaque();
     }
 
     private void mostrarOpcionesDeAtaque() {
-        ataquePanel.removeAll();
-        ataquePanel.setLayout(new FlowLayout());
+        try {
+            ataquePanel.removeAll();
+            ataquePanel.setLayout(new FlowLayout());
 
-        if (entrenador1.equipoDerrotado() || entrenador2.equipoDerrotado()) {
-            log("\n¡La batalla ha terminado!\n");
-            String ganador = entrenador1.equipoDerrotado() ? entrenador2.getNombre() : entrenador1.getNombre();
-            log("Ganador: " + ganador);
-            return;
-        }
+            if (entrenador1.equipoDerrotado() || entrenador2.equipoDerrotado()) {
+                log("\n¡La batalla ha terminado!\n");
+                String ganador = entrenador1.equipoDerrotado() ? entrenador2.getNombre() : entrenador1.getNombre();
+                log("Ganador: " + ganador);
+                return;
+            }
 
-        Pokemon p1 = entrenador1.obtenerPokemonActivo();
-        Pokemon p2 = entrenador2.obtenerPokemonActivo();
+            Pokemon p1 = entrenador1.obtenerPokemonActivo();
+            Pokemon p2 = entrenador2.obtenerPokemonActivo();
 
-        log("Turno de " + entrenador1.getNombre() + " con " + p1.getNombre() + " (HP: " + p1.getPuntos_de_salud() + ")\n");
-        log("Rival: " + p2.getNombre() + " (HP: " + p2.getPuntos_de_salud() + ")\n");
+            log("Turno de " + entrenador1.getNombre() + " con " + p1.getNombre() + " (HP: " + p1.getPuntos_de_salud() + ")\n");
+            log("Rival: " + p2.getNombre() + " (HP: " + p2.getPuntos_de_salud() + ")\n");
 
-        for (int i = 0; i < p1.getAtaques().size(); i++) {
-            int index = i;
-            JButton ataqueBtn = new JButton(p1.getAtaques().get(i).getNombre());
-            ataqueBtn.addActionListener(e -> {
-                p1.atacar(p2, index);
-                if (p2.getPuntos_de_salud() <= 0) {
-                    log(p2.getNombre() + " ha sido derrotado.\n");
-                    entrenador2.getEquipo().remove(p2);
-                }
-                if (!entrenador2.equipoDerrotado()) {
-                    // Turno rival automático (elige primer ataque)
-                    Pokemon rival = entrenador2.obtenerPokemonActivo();
-                    Pokemon objetivo = entrenador1.obtenerPokemonActivo();
-                    rival.atacar(objetivo, 0);
-                    if (objetivo.getPuntos_de_salud() <= 0) {
-                        log(objetivo.getNombre() + " ha sido derrotado.\n");
-                        entrenador1.getEquipo().remove(objetivo);
+            for (int i = 0; i < p1.getAtaques().size(); i++) {
+                int index = i;
+                JButton ataqueBtn = new JButton(p1.getAtaques().get(i).getNombre());
+                ataqueBtn.addActionListener(_ -> {
+                    p1.atacar(p2, index);
+                    if (p2.getPuntos_de_salud() <= 0) {
+                        log(p2.getNombre() + " ha sido derrotado.\n");
+                        entrenador2.getEquipo().remove(p2);
                     }
-                }
-                mostrarOpcionesDeAtaque();
-            });
-            ataquePanel.add(ataqueBtn);
-        }
+                    if (!entrenador2.equipoDerrotado()) {
+                        Pokemon rival = entrenador2.obtenerPokemonActivo();
+                        Pokemon objetivo = entrenador1.obtenerPokemonActivo();
+                        rival.atacar(objetivo, 0);
+                        if (objetivo.getPuntos_de_salud() <= 0) {
+                            log(objetivo.getNombre() + " ha sido derrotado.\n");
+                            entrenador1.getEquipo().remove(objetivo);
+                        }
+                    }
+                    mostrarOpcionesDeAtaque();
+                });
+                ataquePanel.add(ataqueBtn);
+            }
 
-        ataquePanel.revalidate();
-        ataquePanel.repaint();
+            ataquePanel.revalidate();
+            ataquePanel.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al mostrar las opciones de ataque: " + e.getMessage());
+        }
     }
 
     private void seleccionarEquipoAleatorio(Entrenador entrenador) {
@@ -177,6 +201,9 @@ public class BattleGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new BattleGUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            BattleGUI gui = new BattleGUI();
+            gui.setVisible(true);
+        });
     }
 }
