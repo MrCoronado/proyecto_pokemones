@@ -3,11 +3,10 @@ import models.entrenadores.Entrenador;
 import models.pokemones.*;
 import java.util.*;
 
-
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
+        
 
         // Ataques
         Ataque latigoCepa = new Ataque("Látigo Cepa", 10, "Especial", "Planta");
@@ -17,25 +16,26 @@ public class App {
         Ataque rayoHielo = new Ataque("Rayo Hielo", 10, "Especial", "Hielo");
         Ataque terremoto = new Ataque("Terremoto", 10, "Especial", "Tierra");
 
-        // Pokemones con listas de ataques
+        // Pokemones con atributos completos
         Pokemon[] disponibles = {
-            new PokemonPlanta("Roselia", 100, List.of(latigoCepa), 100, 100, 100, 100, 100),
-            new PokemonFuego("Charmander", 100, List.of(lanzallamas), 100, 100, 100, 100, 100),
-            new PokemonElectrico("Pikachu", 100, List.of(trueno),   100, 100, 100, 100, 100),
-            new PokemonAgua("Squirtle", 100, List.of(hidrobomba), 100, 100, 100, 100, 100),
-            new PokemonHielo("Articuno", 100, List.of(rayoHielo),   100, 100, 100, 100, 100),
-            new PokemonTierra("Garchomp", 100, List.of(terremoto),  100, 100, 100, 100, 100)
+            new PokemonPlanta("Roselia", 100, List.of(latigoCepa), 50, 45, 65, 50, 60),
+            new PokemonFuego("Charmander", 100, List.of(lanzallamas), 52, 43, 60, 50, 65),
+            new PokemonElectrico("Pikachu", 100, List.of(trueno), 55, 40, 50, 50, 90),
+            new PokemonAgua("Squirtle", 100, List.of(hidrobomba), 48, 65, 50, 64, 43),
+            new PokemonHielo("Articuno", 100, List.of(rayoHielo), 85, 100, 95, 125, 85),
+            new PokemonTierra("Garchomp", 100, List.of(terremoto), 130, 95, 80, 85, 102)
         };
+        
 
         System.out.print("Ingresa el nombre del primer entrenador: ");
         String nombreJugador = scanner.nextLine();
         Entrenador jugador = new Entrenador(nombreJugador);
-        seleccionarEquipo(scanner, jugador, disponibles);
+        seleccionarEquipoAleatorio(jugador, disponibles);
 
         System.out.print("Ingresa el nombre del segundo entrenador: ");
         String nombreRival = scanner.nextLine();
         Entrenador rival = new Entrenador(nombreRival);
-        seleccionarEquipo(scanner, rival, disponibles);
+        seleccionarEquipoAleatorio(rival, disponibles);
 
         System.out.println("\n¡Comienza la batalla Pokémon!\n");
 
@@ -47,7 +47,19 @@ public class App {
             System.out.println(jugador.getNombre() + ": " + pokemonJugador.getNombre() + " (HP: " + pokemonJugador.getPuntos_de_salud() + ")");
             System.out.println(rival.getNombre() + ": " + pokemonRival.getNombre() + " (HP: " + pokemonRival.getPuntos_de_salud() + ")\n");
 
-            ejecutarTurno(scanner, jugador.getNombre(), pokemonJugador, pokemonRival);
+            // Empieza el pokemon con mayor velocidad
+            if (pokemonJugador.getVelocidad() >= pokemonRival.getVelocidad()) {
+                ejecutarTurno(scanner, jugador.getNombre(), pokemonJugador, pokemonRival);
+                if (pokemonRival.getPuntos_de_salud() > 0) {
+                    ejecutarTurno(scanner, rival.getNombre(), pokemonRival, pokemonJugador);
+                }
+            } else {
+                ejecutarTurno(scanner, rival.getNombre(), pokemonRival, pokemonJugador);
+                if (pokemonJugador.getPuntos_de_salud() > 0) {
+                    ejecutarTurno(scanner, jugador.getNombre(), pokemonJugador, pokemonRival);
+                }
+            }
+
             if (pokemonRival.getPuntos_de_salud() <= 0) {
                 System.out.println("\n" + pokemonRival.getNombre() + " ha sido derrotado.");
                 rival.getEquipo().remove(pokemonRival);
@@ -56,9 +68,6 @@ public class App {
                 }
             }
 
-            if (rival.equipoDerrotado()) break;
-
-            ejecutarTurno(scanner, rival.getNombre(), pokemonRival, pokemonJugador);
             if (pokemonJugador.getPuntos_de_salud() <= 0) {
                 System.out.println("\n" + pokemonJugador.getNombre() + " ha sido derrotado.");
                 jugador.getEquipo().remove(pokemonJugador);
@@ -77,21 +86,23 @@ public class App {
         scanner.close();
     }
 
-    public static void seleccionarEquipo(Scanner scanner, Entrenador entrenador, Pokemon[] disponibles) {
-        System.out.println("\n" + entrenador.getNombre() + ", selecciona 3 Pokémon:");
-        for (int i = 0; i < disponibles.length; i++) {
-            System.out.println((i + 1) + ". " + disponibles[i].getNombre());
-        }
-        
+    public static void seleccionarEquipoAleatorio(Entrenador entrenador, Pokemon[] disponibles) {
+        List<Integer> indicesUsados = new ArrayList<>();
+        Random random = new Random();
+    
         while (entrenador.getEquipo().size() < 3) {
-            System.out.print("Ingresa el número de un Pokémon: ");
-            int eleccion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer después de nextInt()
-            if (eleccion >= 1 && eleccion <= disponibles.length) {
-                entrenador.agregarPokemon(crearNuevoPokemon(disponibles[eleccion - 1]));
-            } else {
-                System.out.println("Selección inválida.");
-            }
+            int indice;
+            do {
+                indice = random.nextInt(disponibles.length);
+            } while (indicesUsados.contains(indice));
+            indicesUsados.add(indice);
+    
+            entrenador.agregarPokemon(crearNuevoPokemon(disponibles[indice]));
+        }
+    
+        System.out.println(entrenador.getNombre() + " ha recibido su equipo aleatorio:");
+        for (Pokemon p : entrenador.getEquipo()) {
+            System.out.println("- " + p.getNombre());
         }
     }
 
@@ -112,34 +123,41 @@ public class App {
         }
     }
 
-    public static Pokemon crearNuevoPokemon(Pokemon original) {
-    List<Ataque> copiaAtaques = new ArrayList<>(original.getAtaques()); // Copia defensiva
-    return switch (original.getTipo()) {
-        case PLANTA -> new PokemonPlanta(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
-                                         original.getAtaque(), original.getDefensa(),
-                                         original.getAtaqueEspecial(), original.getDefensaEspecial(),
-                                         original.getVelocidad());
-        case FUEGO -> new PokemonFuego(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
-                                       original.getAtaque(), original.getDefensa(),
-                                       original.getAtaqueEspecial(), original.getDefensaEspecial(),
-                                       original.getVelocidad());
-        case ELECTRICO -> new PokemonElectrico(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
-                                               original.getAtaque(), original.getDefensa(),
-                                               original.getAtaqueEspecial(), original.getDefensaEspecial(),
-                                               original.getVelocidad());
-        case AGUA -> new PokemonAgua(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
-                                     original.getAtaque(), original.getDefensa(),
-                                     original.getAtaqueEspecial(), original.getDefensaEspecial(),
-                                     original.getVelocidad());
-        case HIELO -> new PokemonHielo(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
-                                       original.getAtaque(), original.getDefensa(),
-                                       original.getAtaqueEspecial(), original.getDefensaEspecial(),
-                                       original.getVelocidad());
-        case TIERRA -> new PokemonTierra(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
-                                         original.getAtaque(), original.getDefensa(),
-                                         original.getAtaqueEspecial(), original.getDefensaEspecial(),
-                                         original.getVelocidad());
-    };
-}
 
+    /*Este metodo funciona como solucion al problema cuando pelean dos pokemones iguales
+     * (crea otra instancia del pokemon y java los toma com difertentes para que no hagan doble daño)
+     */
+    public static Pokemon crearNuevoPokemon(Pokemon original) {
+        return switch (original.getTipo()) {
+            case PLANTA -> new PokemonPlanta(
+                original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
+                original.getAtaque(), original.getDefensa(), original.getAtaqueEspecial(),
+                original.getDefensaEspecial(), original.getVelocidad());
+    
+            case FUEGO -> new PokemonFuego(
+                original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
+                original.getAtaque(), original.getDefensa(), original.getAtaqueEspecial(),
+                original.getDefensaEspecial(), original.getVelocidad());
+    
+            case ELECTRICO -> new PokemonElectrico(
+                original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
+                original.getAtaque(), original.getDefensa(), original.getAtaqueEspecial(),
+                original.getDefensaEspecial(), original.getVelocidad());
+    
+            case AGUA -> new PokemonAgua(
+                original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
+                original.getAtaque(), original.getDefensa(), original.getAtaqueEspecial(),
+                original.getDefensaEspecial(), original.getVelocidad());
+    
+            case HIELO -> new PokemonHielo(
+                original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
+                original.getAtaque(), original.getDefensa(), original.getAtaqueEspecial(),
+                original.getDefensaEspecial(), original.getVelocidad());
+    
+            case TIERRA -> new PokemonTierra(
+                original.getNombre(), original.getPuntos_de_salud(), original.getAtaques(),
+                original.getAtaque(), original.getDefensa(), original.getAtaqueEspecial(),
+                original.getDefensaEspecial(), original.getVelocidad());
+        };
+    }
 }
