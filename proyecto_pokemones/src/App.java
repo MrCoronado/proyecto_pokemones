@@ -3,6 +3,7 @@ import models.entrenadores.Entrenador;
 import models.pokemones.*;
 import java.util.*;
 
+
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -18,12 +19,12 @@ public class App {
 
         // Pokemones con listas de ataques
         Pokemon[] disponibles = {
-            new PokemonPlanta("Roselia", 100, List.of(latigoCepa)),
-            new PokemonFuego("Charmander", 100, List.of(lanzallamas)),
-            new PokemonElectrico("Pikachu", 100, List.of(trueno)),
-            new PokemonAgua("Squirtle", 100, List.of(hidrobomba)),
-            new PokemonHielo("Articuno", 100, List.of(rayoHielo)),
-            new PokemonTierra("Garchomp", 100, List.of(terremoto))
+            new PokemonPlanta("Roselia", 100, List.of(latigoCepa), 100, 100, 100, 100, 100),
+            new PokemonFuego("Charmander", 100, List.of(lanzallamas), 100, 100, 100, 100, 100),
+            new PokemonElectrico("Pikachu", 100, List.of(trueno),   100, 100, 100, 100, 100),
+            new PokemonAgua("Squirtle", 100, List.of(hidrobomba), 100, 100, 100, 100, 100),
+            new PokemonHielo("Articuno", 100, List.of(rayoHielo),   100, 100, 100, 100, 100),
+            new PokemonTierra("Garchomp", 100, List.of(terremoto),  100, 100, 100, 100, 100)
         };
 
         System.out.print("Ingresa el nombre del primer entrenador: ");
@@ -112,17 +113,33 @@ public class App {
     }
 
     public static Pokemon crearNuevoPokemon(Pokemon original) {
-        return switch (original.getTipo()) {
+    List<Ataque> copiaAtaques = new ArrayList<>(original.getAtaques()); // Copia defensiva
+    return switch (original.getTipo()) {
+        case PLANTA -> new PokemonPlanta(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
+                                         original.getAtaque(), original.getDefensa(),
+                                         original.getAtaqueEspecial(), original.getDefensaEspecial(),
+                                         original.getVelocidad());
+        case FUEGO -> new PokemonFuego(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
+                                       original.getAtaque(), original.getDefensa(),
+                                       original.getAtaqueEspecial(), original.getDefensaEspecial(),
+                                       original.getVelocidad());
+        case ELECTRICO -> new PokemonElectrico(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
+                                               original.getAtaque(), original.getDefensa(),
+                                               original.getAtaqueEspecial(), original.getDefensaEspecial(),
+                                               original.getVelocidad());
+        case AGUA -> new PokemonAgua(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
+                                     original.getAtaque(), original.getDefensa(),
+                                     original.getAtaqueEspecial(), original.getDefensaEspecial(),
+                                     original.getVelocidad());
+        case HIELO -> new PokemonHielo(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
+                                       original.getAtaque(), original.getDefensa(),
+                                       original.getAtaqueEspecial(), original.getDefensaEspecial(),
+                                       original.getVelocidad());
+        case TIERRA -> new PokemonTierra(original.getNombre(), original.getPuntos_de_salud(), copiaAtaques,
+                                         original.getAtaque(), original.getDefensa(),
+                                         original.getAtaqueEspecial(), original.getDefensaEspecial(),
+                                         original.getVelocidad());
+    };
+}
 
-            /*Este metodo funciona como solucion al problema cuando pelean dos pokmones iguales
-             * (crea otra instancia del pokemon y java los toma com difertentes para que no hagan doble daño)
-             */
-            case PLANTA -> new PokemonPlanta(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
-            case FUEGO -> new PokemonFuego(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
-            case ELECTRICO -> new PokemonElectrico(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
-            case AGUA -> new PokemonAgua(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
-            case HIELO -> new PokemonHielo(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
-            case TIERRA -> new PokemonTierra(original.getNombre(), original.getPuntos_de_salud(), original.getAtaques());
-        };
-    }
 }
