@@ -17,12 +17,21 @@ public abstract class Pokemon {
     protected int puntos_de_salud;
     protected TipoPokemon tipo;
     protected List<Ataque> ataques = new ArrayList<>();
+    protected int ataque;
+    protected int defensa;
+    protected int ataqueEspecial;
+    protected int defensaEspecial;
+    protected int velocidad;
     
-    public Pokemon(String nombre, int puntos_de_salud, TipoPokemon tipo, List<Ataque> ataques) {
+    public Pokemon(String nombre, int puntos_de_salud, TipoPokemon tipo, List<Ataque> ataques, int ataque, int defensa, int ataqueEspecial, int defensaEspecial, int velocidad) {
             this.nombre = nombre;
             this.puntos_de_salud = puntos_de_salud;
             this.tipo = tipo;
             this.ataques = ataques;
+            this.defensa = defensa;
+            this.ataqueEspecial = ataqueEspecial;
+            this.defensaEspecial = defensaEspecial;
+            this.velocidad = velocidad;
     }
     public String toString(){
         return nombre + "(HP: " + puntos_de_salud + ", Tipo: " + tipo + ", Ataque: " + ataque + ", Defensa: " + defensa +
@@ -58,8 +67,6 @@ public abstract class Pokemon {
         this.ataques = ataques;
     }
 
-<<<<<<< Updated upstream
-=======
     public int getAtaque() {
         return ataque;
     }
@@ -106,13 +113,15 @@ public abstract class Pokemon {
         return this.getNombre() + " usa " + ataque.getNombre() + " contra " + objetivo.getNombre() + " y causa " + danio + " de daño.\n";
     }
 
->>>>>>> Stashed changes
+
     public void atacar(Pokemon enemigo, int indice) {
         if (indice < 0 || indice >= ataques.size()) {
             System.out.println("Índice de ataque inválido.");
             return;
         }
         Ataque ataqueSeleccionado = ataques.get(indice);
+        ataqueSeleccionado.aplicarAtaque(this, enemigo); // Llama al método aplicarAtaque de la clase Ataque
+       /*  int danioFinal = calcularDanio(ataqueSeleccionado, enemigo);
         ataqueSeleccionado.aplicarAtaque(this, enemigo); // Llama al método aplicarAtaque de la clase Ataque
        /*  int danioFinal = calcularDanio(ataqueSeleccionado, enemigo);
         
@@ -128,7 +137,6 @@ public abstract class Pokemon {
         
         }
        
->>>>>>> Stashed changes
 
     // Ventajas de tipo
     public static boolean tieneVentaja(TipoPokemon atacante, TipoPokemon defensor) {
