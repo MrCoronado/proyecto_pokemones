@@ -24,6 +24,11 @@ public abstract class Pokemon {
             this.tipo = tipo;
             this.ataques = ataques;
     }
+    public String toString(){
+        return nombre + "(HP: " + puntos_de_salud + ", Tipo: " + tipo + ", Ataque: " + ataque + ", Defensa: " + defensa +
+                ", Ataque Especial: " + ataqueEspecial + ", Defensa Especial: " + defensaEspecial +
+                ", Velocidad: " + velocidad + ")";
+    }
 
     public String getNombre() {
         return nombre;
@@ -53,18 +58,77 @@ public abstract class Pokemon {
         this.ataques = ataques;
     }
 
+<<<<<<< Updated upstream
+=======
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    public int getDefensa() {
+        return defensa;
+    }
+
+    public void setDefensa(int defensa) {
+        this.defensa = defensa;
+    }
+
+    public int getAtaqueEspecial() {
+        return ataqueEspecial;
+    }
+
+    public void setAtaqueEspecial(int ataqueEspecial) {
+        this.ataqueEspecial = ataqueEspecial;
+    }
+
+    public int getDefensaEspecial() {
+        return defensaEspecial;
+    }
+
+    public void setDefensaEspecial(int defensaEspecial) {
+        this.defensaEspecial = defensaEspecial;
+    }
+
+    public int getVelocidad() {
+        return velocidad;
+    }
+
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
+    }
+
+    public String atacarConAtaque(Pokemon objetivo, Ataque ataque) {
+        int danio = calcularDanio(ataque, objetivo);
+        objetivo.recibirDanio(danio);
+        return this.getNombre() + " usa " + ataque.getNombre() + " contra " + objetivo.getNombre() + " y causa " + danio + " de daño.\n";
+    }
+
+>>>>>>> Stashed changes
     public void atacar(Pokemon enemigo, int indice) {
         if (indice < 0 || indice >= ataques.size()) {
             System.out.println("Índice de ataque inválido.");
             return;
         }
         Ataque ataqueSeleccionado = ataques.get(indice);
-        int danioFinal = calcularDanio(ataqueSeleccionado, enemigo);
+        ataqueSeleccionado.aplicarAtaque(this, enemigo); // Llama al método aplicarAtaque de la clase Ataque
+       /*  int danioFinal = calcularDanio(ataqueSeleccionado, enemigo);
         
         System.out.println(nombre + " ataca a " + enemigo.getNombre() + " con " + ataqueSeleccionado.getNombre() +
             ", causando " + danioFinal + " puntos de daño.");
+<<<<<<< Updated upstream
         enemigo.setPuntos_de_salud(enemigo.getPuntos_de_salud() - danioFinal);
     }
+=======
+            
+            enemigo.recibirDanio(danioFinal);
+            */
+        
+        }
+       
+>>>>>>> Stashed changes
 
     // Ventajas de tipo
     public static boolean tieneVentaja(TipoPokemon atacante, TipoPokemon defensor) {

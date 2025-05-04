@@ -30,8 +30,9 @@ public class Ataque {
         return tipoAtaque;
     }
 
-    public void aplicarAtaque(Pokemon objetivo) {
-        System.out.println(objetivo.getNombre() + " recibe " + dano + " de daño por " + nombre);
+    public void aplicarAtaque(Pokemon atacante,Pokemon objetivo) {
+        int danio = atacante.calcularDanio(this, objetivo);
+        System.out.println(atacante.getNombre() + " usa " + nombre + " contra " + objetivo.getNombre() + ",/n causando " + danio + " de daño.");
         objetivo.recibirDanio(dano);
     }
 }
