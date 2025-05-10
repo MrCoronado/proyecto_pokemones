@@ -25,14 +25,10 @@ public class Entrenador {
     }
 
     public void agregarPokemon(Pokemon pokemon) {
-        if (equipo.size() < 3) {
-            equipo.add(pokemon);
-        } else {
-            System.out.println("El equipo ya tiene 3 Pokémon. No puedes agregar más.");
-        }
+        equipo.add(pokemon); 
     }
-
-    public Pokemon obtenerPokemonActivo(){
+    
+    public Pokemon obtenerPokemonActivo(){ 
         if (!equipo.isEmpty() && equipo.get(0).getPuntos_de_salud() > 0) {
             return equipo.get(0);
         }
