@@ -25,26 +25,14 @@ public class Entrenador {
     }
 
     public void agregarPokemon(Pokemon pokemon) {
-        if (equipo.size() < 3) {
-            equipo.add(pokemon);
-        } else {
-            System.out.println("El equipo ya tiene 3 Pokémon. No puedes agregar más.");
-        }
+        equipo.add(pokemon); 
     }
-
-    public Pokemon elegirPokemon(int indice) {
-        if (indice >= 0 && indice < equipo.size()) {
-            Pokemon seleccionado = equipo.get(indice);
-            if (seleccionado.getPuntos_de_salud() > 0) {
-                return seleccionado;
-            } else {
-                System.out.println(seleccionado.getNombre() + " está debilitado. Elige otro Pokémon.");
-                return null;
-            }
-        } else {
-            System.out.println("Selección inválida.");
-            return null;
+    
+    public Pokemon obtenerPokemonActivo(){ 
+        if (!equipo.isEmpty() && equipo.get(0).getPuntos_de_salud() > 0) {
+            return equipo.get(0);
         }
+        return null;
     }
 
     public boolean equipoDerrotado() {
