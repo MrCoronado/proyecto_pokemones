@@ -50,10 +50,14 @@ public class BattleGUI extends JFrame {
         topPanel.setBackground(Color.YELLOW);
         topPanel.setBorder(BorderFactory.createTitledBorder("Bienvenidos a la Batalla Pokémon"));
 
+
         entrenador1Field = new JTextField(10);
         entrenador2Field = new JTextField(10);
         iniciarButton = new JButton("Iniciar Batalla");
         iniciarButton.setBackground(Color.GREEN);
+        iniciarButton.setForeground(Color.BLACK);
+        
+        
 
         topPanel.add(new JLabel("Entrenador 1:"));
         topPanel.add(entrenador1Field);

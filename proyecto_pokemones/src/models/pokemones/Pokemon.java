@@ -111,7 +111,7 @@ public abstract class Pokemon {
             statDefensa = enemigo.defensaEspecial;
         }
 
-        double baseDanio = (((2 * nivel / 5.0 + 2) * potencia * ((double)statAtaque / statDefensa)) / 50.0) + 2; 
+        double baseDanio = (((2 * nivel / 5.0 + 2) * potencia * ((double)statAtaque / statDefensa)) / 50.0) + 2;
 
         double multiplicador = 1.0;
         if (tieneVentaja(this.tipo, enemigo.getTipo())) {
