@@ -13,26 +13,34 @@ public class Ataque {
         this.tipoDanio = tipoDanio;
         this.tipoAtaque = tipoAtaque;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public int getDano() {
         return dano;
     }
-
     public String getTipoDanio() {
         return tipoDanio;
     }
-
     public String getTipoAtaque() {
         return tipoAtaque;
     }
-
-    public void aplicarAtaque(Pokemon atacante,Pokemon objetivo) {
+    
+    public Ataque(Ataque otro) {
+    this.nombre = otro.nombre;
+    this.dano = otro.dano;
+    this.tipoDanio = otro.tipoDanio;
+    this.tipoAtaque = otro.tipoAtaque;
+}
+    // Método para calcular el daño
+    // basado en el tipo de ataque y el tipo del Pokémon objetivo
+    public String aplicarAtaque(Pokemon atacante,Pokemon objetivo) {
         int danio = atacante.calcularDanio(this, objetivo);
-        System.out.println(atacante.getNombre() + " usa " + nombre + " contra " + objetivo.getNombre() + ",/n causando " + danio + " de daño.");
-        objetivo.recibirDanio(dano);
+        objetivo.recibirDanio(danio);
+
+        String efectividad = atacante.calcularMensajeEfectividad(objetivo);
+        return atacante.getNombre() + " usa " + nombre + 
+        " contra " + objetivo.getNombre() + 
+        " y causa " + danio + " de daño" + efectividad;      
     }
 }
