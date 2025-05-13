@@ -3,7 +3,7 @@ import models.ataques.Ataque;
 import java.util.List;
 import java.util.ArrayList;
 
-public abstract class Pokemon { 
+public class Pokemon { 
     public enum TipoPokemon {
         AGUA,
         FUEGO,
@@ -13,15 +13,15 @@ public abstract class Pokemon {
         TIERRA;
     }
 
-    protected String nombre;
-    protected int puntos_de_salud;
-    protected TipoPokemon tipo;
-    protected List<Ataque> ataques = new ArrayList<>();
-    protected int ataque;
-    protected int defensa;
-    protected int ataqueEspecial;
-    protected int defensaEspecial;
-    protected int velocidad;
+    private String nombre;
+    private int puntos_de_salud;
+    private TipoPokemon tipo;
+    private List<Ataque> ataques = new ArrayList<>();
+    private int ataque;
+    private int defensa;
+    private int ataqueEspecial;
+    private int defensaEspecial;
+    private int velocidad;
 
     public Pokemon(String nombre, int puntos_de_salud, TipoPokemon tipo, List<Ataque> ataques, int ataque, int defensa, int ataqueEspecial, int defensaEspecial, int velocidad) {
         this.nombre = nombre;
@@ -67,19 +67,13 @@ public abstract class Pokemon {
     public int getVelocidad() { return velocidad; }
     public void setVelocidad(int velocidad) { this.velocidad = velocidad; }
 
-    public String atacarConAtaque(Pokemon objetivo, Ataque ataque) {
-        int danio = calcularDanio(ataque, objetivo);
-        objetivo.recibirDanio(danio);
-        return this.getNombre() + " usa " + ataque.getNombre() + " contra " + objetivo.getNombre() + " y causa " + danio + " de daño.\n";
-    }
 
-    public void atacar(Pokemon enemigo, int indice) {
+    public String atacar(Pokemon enemigo, int indice) {
         if (indice < 0 || indice >= ataques.size()) {
-            System.out.println("Índice de ataque inválido.");
-            return;
+            return "Índice de ataque inválido.";
         }
         Ataque ataqueSeleccionado = ataques.get(indice);
-        ataqueSeleccionado.aplicarAtaque(this, enemigo); 
+        return ataqueSeleccionado.aplicarAtaque(this, enemigo); 
     }
 
     public static boolean tieneVentaja(TipoPokemon atacante, TipoPokemon defensor) {
@@ -92,36 +86,57 @@ public abstract class Pokemon {
     }
 
     public void recibirDanio(int danio) {
-        this.puntos_de_salud -= danio;
-        if (this.puntos_de_salud < 0) {
-            this.puntos_de_salud = 0;
-        }
+    if (danio < 0) {
+        danio = 0; // Evitar daño negativo que "cure" (por si acaso)
     }
 
-    public int calcularDanio(Ataque ataqueSeleccionado, Pokemon enemigo) {
-        int nivel = 50;
-        int potencia = ataqueSeleccionado.getDano();
+    this.puntos_de_salud -= danio;
 
-        int statAtaque, statDefensa;  
-        if (ataqueSeleccionado.getTipoDanio().equalsIgnoreCase("Fisico")) { 
-            statAtaque = this.ataque; 
-            statDefensa = enemigo.defensa; 
-        } else { 
-            statAtaque = this.ataqueEspecial;
-            statDefensa = enemigo.defensaEspecial;
-        }
-
-        double baseDanio = (((2 * nivel / 5.0 + 2) * potencia * ((double)statAtaque / statDefensa)) / 50.0) + 2;
-
-        double multiplicador = 1.0;
-        if (tieneVentaja(this.tipo, enemigo.getTipo())) {
-            multiplicador = 1.3;
-            System.out.println("¡Es súper efectivo!"); 
-        } else if (tieneVentaja(enemigo.getTipo(), this.tipo)) {
-            multiplicador = 0.7;
-            System.out.println("No es muy efectivo...");
-        }
-
-        return (int)(baseDanio * multiplicador);
+    if (this.puntos_de_salud < 0) {
+        this.puntos_de_salud = 0;
     }
 }
+
+    public int calcularDanio(Ataque ataqueSeleccionado, Pokemon enemigo) {
+    int nivel = 50;
+    int potencia = ataqueSeleccionado.getDano();
+
+    int statAtaque, statDefensa;  
+    if (ataqueSeleccionado.getTipoDanio().equalsIgnoreCase("Fisico")) { 
+        statAtaque = this.ataque; 
+        statDefensa = enemigo.defensa; 
+    } else { 
+        statAtaque = this.ataqueEspecial;
+        statDefensa = enemigo.defensaEspecial;
+    }
+
+    // Evitar división por cero 
+    if (statDefensa == 0) {
+        statDefensa = 1;
+    }
+
+    // Fórmula base de daño
+    double baseDanio = (((2 * nivel / 5.0 + 2) * potencia * ((double)statAtaque / statDefensa)) / 50.0) + 2; 
+
+    // Multiplicador de ventaja de tipo
+    double multiplicador = 1.0;
+    if (tieneVentaja(this.tipo, enemigo.getTipo())) {
+        multiplicador = 1.3;
+    } else if (tieneVentaja(enemigo.getTipo(), this.tipo)) {
+        multiplicador = 0.7;
+    }
+
+    return (int)(baseDanio * multiplicador);
+}
+
+    public String calcularMensajeEfectividad(Pokemon enemigo) {
+        if (tieneVentaja(this.tipo, enemigo.getTipo())) {
+            return " ¡Es súper efectivo!";
+        } else if (tieneVentaja(enemigo.getTipo(), this.tipo)) {
+            return " No es muy efectivo..";
+        }
+        return "";
+    }
+    
+}
+
