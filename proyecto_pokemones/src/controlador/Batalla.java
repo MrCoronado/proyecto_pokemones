@@ -1,8 +1,9 @@
-package models.batalla;
+package controlador;
 
 import models.entrenadores.Entrenador;
 import models.pokemones.Pokemon;
 import vista.Vista;
+
 
 public class Batalla {
 
@@ -10,16 +11,26 @@ public class Batalla {
     private Entrenador rival;
     private Vista vista;
 
-    public Batalla(Entrenador jugador, Entrenador rival) {
+    public Batalla(Entrenador jugador, Entrenador rival, Vista vista) {
         this.jugador = jugador;
         this.rival = rival;
-        this.vista = new Vista();
+        this.vista = vista;
     }
 
     public void iniciar() {
         vista.mostrarMensaje("\n¡Comienza la batalla Pokémon!\n");
 
-        while (!jugador.equipoDerrotado() && !rival.equipoDerrotado()) {
+
+
+        Pokemon p1 = jugador.obtenerPokemonActivo();
+        Pokemon p2 = rival.obtenerPokemonActivo();
+
+        vista.mostrarMensaje("--- Estado inicial ---");
+        vista.mostrarEstadoPokemon(jugador.getNombre(), p1);
+        vista.mostrarEstadoPokemon(rival.getNombre(), p2);
+
+
+        /*while (!jugador.equipoDerrotado() && !rival.equipoDerrotado()) {
             Pokemon p1 = jugador.getEquipo().get(0);
             Pokemon p2 = rival.getEquipo().get(0);
 
@@ -56,7 +67,7 @@ public class Batalla {
             vista.mostrarMensaje("\n¡" + rival.getNombre() + " gana la batalla!");
         } else {
             vista.mostrarMensaje("\n¡" + jugador.getNombre() + " gana la batalla!");
-        }
+        }*/
     }
 
     private void ejecutarTurno(Entrenador entrenador, Pokemon atacante, Pokemon defensor) {
