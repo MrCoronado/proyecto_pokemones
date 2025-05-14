@@ -20,7 +20,7 @@ import java.awt.event.ActionEvent;
 
 public class VistaGUI extends JFrame implements Vista {
     private JTextArea areaTexto;
-    private JButton[] botonesAtaque;
+    private JButton botonAtaque;
     private Batalla batalla;
     private Entrenador jugador;
     private Entrenador rival;
@@ -39,14 +39,24 @@ public class VistaGUI extends JFrame implements Vista {
         
         areaTexto = new JTextArea();
         areaTexto.setEditable(false);
+        areaTexto.setBackground(Color.LIGHT_GRAY);
+        areaTexto.setForeground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(areaTexto);
         add(scrollPane, BorderLayout.CENTER);
-
+        areaTexto.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 16));
         JPanel panelsuperior= new JPanel();
         panelsuperior.setLayout(new GridLayout(2, 2));
+        
 
         imagenJugador = new JLabel("Entrenador 1");
         imagenRival = new JLabel("Entrenador 2");
+
+        imagenJugador.setHorizontalAlignment(SwingConstants.CENTER);
+        imagenRival.setHorizontalAlignment(SwingConstants.CENTER);
+        imagenJugador.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
+        imagenRival.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
+        imagenJugador.setForeground(Color.BLUE);
+        imagenRival.setForeground(Color.RED);
 
         
        try {
@@ -72,10 +82,14 @@ public class VistaGUI extends JFrame implements Vista {
         
 
         barraSaludJugador = new JProgressBar(0, 100);
+        barraSaludJugador.setValue(100); // Valor inicial de salud
         barraSaludJugador.setStringPainted(true);
+        barraSaludJugador.setForeground(Color.GREEN);
         panelsuperior.add(barraSaludJugador);
         barraSaludRival = new JProgressBar(0, 100);
+        barraSaludRival.setValue(100); // Valor inicial de salud
         barraSaludRival.setStringPainted(true);
+        barraSaludRival.setForeground(Color.GREEN);
         panelsuperior.add(barraSaludRival);
 
         add(panelsuperior, BorderLayout.NORTH);
@@ -83,15 +97,12 @@ public class VistaGUI extends JFrame implements Vista {
 
         
         JPanel panelBotones = new JPanel();
-        panelBotones.setLayout(new GridLayout(1, 5));
+        panelBotones.setLayout(new FlowLayout());
         
-        botonesAtaque = new JButton[4];
-        for (int i = 0; i < 4; i++) {
-            int finalI = i;
-            botonesAtaque[i] = new JButton("Ataque " + (i + 1));
-            botonesAtaque[i].addActionListener((ActionEvent _) -> ejecutarTurno(finalI));
-            panelBotones.add(botonesAtaque[i]);
-            }
+        botonAtaque = new JButton("Atacar");
+        
+            botonAtaque.addActionListener((ActionEvent _) -> ejecutarTurno(0));
+            panelBotones.add(botonAtaque);
         add(panelBotones, BorderLayout.SOUTH);
 
         inicializarJuego();
@@ -118,26 +129,28 @@ private void inicializarJuego(){
     imagenRival.setText(rival.getNombre());
 
 
-    areaTexto.setText("¡Bienvenido a la batalla Pokémon!\n");
-    areaTexto.append("Entrenador " + jugador.getNombre() + " vs Entrenador " + rival.getNombre() + "\n");
-   /*  areaTexto.append(nombrejugador + "Recibio su equipo: \n");
+    areaTexto.setText("¡-----------------Bienvenido a la batalla Pokémon!--------------------\n");
+    areaTexto.append("Entrenador " + jugador.getNombre() + " 🆚 Entrenador " + rival.getNombre() + "\n");
+    areaTexto.append(nombrejugador + " Recibio su equipo: \n");
     for (Pokemon pokemon : jugador.getEquipo()) {
         areaTexto.append(pokemon.toString() + "\n");
     }
-    areaTexto.append(nombreRival + "Recibio su equipo: \n");
+    areaTexto.append(nombreRival + " Recibio su equipo: \n");
     for (Pokemon pokemon : rival.getEquipo()) {
         areaTexto.append(pokemon.toString() + "\n");
     }
 
-    areaTexto.append("¡La batalla comienza!\n");
-    batalla = new Batalla(jugador, rival, this);*/
+
+
+    areaTexto.append("¡⚔️La batalla comienza⚔️!\n");
+    batalla = new Batalla(jugador, rival, this);
     batalla.iniciar();
 
 }
 
 private void ejecutarTurno(int indiceAtaque){
     if(jugador.equipoDerrotado() || rival.equipoDerrotado()){
-        areaTexto.append("La batalla ha terminado.\n");
+        areaTexto.append("❌ La batalla ha terminado.\n");
         return;
     }
     Pokemon atacante = jugador.obtenerPokemonActivo();
@@ -168,18 +181,26 @@ private void ejecutarTurno(int indiceAtaque){
 
 private void actualizarBotonesAtaque(){
     Pokemon pokemonActivo = jugador.obtenerPokemonActivo();
-    if(pokemonActivo == null)return;
+    if(pokemonActivo == null || pokemonActivo.getAtaques().isEmpty()){
+        botonAtaque.setEnabled(false);
+        botonAtaque.setText("Sin ataque");
+        
+    }else{
+        Ataque ataque = pokemonActivo.getAtaques().get(0);
+        botonAtaque.setEnabled(true);
+        //botonAtaque.setText("Atacar");
+        botonAtaque.setText(ataque.getNombre());
+        botonAtaque.setBackground(Color.RED);
+        botonAtaque.setForeground(Color.WHITE);
+        botonAtaque.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 16));
+        botonAtaque.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        botonAtaque.setPreferredSize(new Dimension(150, 50));
+        botonAtaque.setFocusPainted(false);
+        botonAtaque.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-    java.util.List<Ataque> ataques = pokemonActivo.getAtaques();
-    for(int i = 0; i < botonesAtaque.length; i++){
-        if(i < ataques.size()){
-            botonesAtaque[i].setText(ataques.get(i).getNombre());
-            botonesAtaque[i].setEnabled(true);
-        } else {
-            botonesAtaque[i].setText("Sin ataque");
-            botonesAtaque[i].setEnabled(false);
-        }
     }
+
+    
 }
 
 public void mostrarMensaje(String mensaje) {

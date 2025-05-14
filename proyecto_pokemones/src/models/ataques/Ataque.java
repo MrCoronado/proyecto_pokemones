@@ -43,4 +43,8 @@ public class Ataque {
         " contra " + objetivo.getNombre() + 
         " y causa " + danio + " de daño" + efectividad;      
     }
+
+    public String toString() {
+        return nombre + " (Tipo: " + tipoDanio + ", Daño: " + dano + ")";
+    }
 }
