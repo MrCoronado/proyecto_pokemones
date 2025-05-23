@@ -1,26 +1,16 @@
 package vista;
 
-
 import models.ataques.Ataque;
 import models.entrenadores.Entrenador;
 import models.pokemones.CreacionPokemones;
 import models.pokemones.Pokemon;
-
-
-//import models.pokemones.Pokemon.TipoPokemon;
 
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
-
 import controlador.Batalla;
-
-
-
-
-
 
 public class VistaConsola implements Vista {
 
@@ -29,7 +19,7 @@ public class VistaConsola implements Vista {
     public VistaConsola() {
         scanner = new Scanner(System.in);
     }
-    
+
     public void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);
     }
@@ -42,7 +32,7 @@ public class VistaConsola implements Vista {
         }
         System.out.print("Opción: ");
         int opcion = scanner.nextInt() - 1;
-        scanner.nextLine(); // aca Limpia el buffer
+        scanner.nextLine(); // Limpiar buffer
         return opcion;
     }
 
@@ -50,48 +40,71 @@ public class VistaConsola implements Vista {
         System.out.println(nombreEntrenador + ": " + pokemon.getNombre() + " (HP: " + pokemon.getPuntos_de_salud() + ")");
     }
 
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Pokemon[] disponibles = CreacionPokemones.obtenerPokemonesDisponibles();
+        VistaConsola vista = new VistaConsola();
 
-        // Entrenadores
-        System.out.print("Ingresa el nombre del primer entrenador: ");
-        Entrenador jugador = new Entrenador(scanner.nextLine());
-        seleccionarEquipoAleatorio(jugador, disponibles);
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            Pokemon[] disponibles = CreacionPokemones.obtenerPokemonesDisponibles();
 
-        System.out.print("Ingresa el nombre del segundo entrenador: ");
-        Entrenador rival = new Entrenador(scanner.nextLine());
-        seleccionarEquipoAleatorio(rival, disponibles);
+            System.out.print("Ingresa el nombre del primer entrenador: ");
+            Entrenador jugador = new Entrenador(scanner.nextLine());
 
-        // Iniciar batalla
-        VistaConsola vistaConsola = new VistaConsola();
-        Batalla batalla = new Batalla(jugador, rival, vistaConsola);
-        batalla.iniciar();
+            System.out.print("Ingresa el nombre del segundo entrenador: ");
+            Entrenador rival = new Entrenador(scanner.nextLine());
 
-        //scanner.close();
-    }
+            for (int i = 0; i < 3; i++) {
+                jugador.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[i]));
+                rival.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[i + 3]));
+            }
 
-    // Método para seleccionar un equipo aleatorio de Pokémon
-    // para un entrenador, asegurando que no se repitan
-    public static void seleccionarEquipoAleatorio(Entrenador entrenador, Pokemon[] disponibles) { 
-        List<Integer> indicesUsados = new ArrayList<>();
-        Random random = new Random();
+            Batalla batalla = new Batalla(jugador, rival, vista);
 
-        while (entrenador.getEquipo().size() < 3) {
-            int indice;
-            do {
-                indice = random.nextInt(disponibles.length);
-            } while (indicesUsados.contains(indice));
-            indicesUsados.add(indice);
+            vista.mostrarMensaje("\n¡-----------------Bienvenido a la batalla Pokémon--------------------\n");
+            vista.mostrarMensaje("Entrenador " + jugador.getNombre() + " 🆚 Entrenador " + rival.getNombre());
 
-            entrenador.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[indice]));
+            vista.mostrarMensaje(jugador.getNombre() + " recibió su equipo:");
+            for (Pokemon p : jugador.getEquipo()) {
+                vista.mostrarMensaje(p.toString());
+            }
+
+            vista.mostrarMensaje(rival.getNombre() + " recibió su equipo:");
+            for (Pokemon p : rival.getEquipo()) {
+                vista.mostrarMensaje(p.toString());
+            }
+
+            vista.mostrarMensaje("\n¡⚔️ La batalla comienza! ⚔️\n");
+
+            while (!jugador.equipoDerrotado() && !rival.equipoDerrotado()) {
+                Pokemon atacante = jugador.obtenerPokemonActivo();
+                Pokemon defensor = rival.obtenerPokemonActivo();
+
+                int opcion = vista.pedirOpcionAtaque(atacante);
+                String mensajeAtaque = atacante.atacar(defensor, opcion);
+                vista.mostrarMensaje(mensajeAtaque);
+                vista.mostrarEstadoPokemon(rival.getNombre(), defensor);
+
+                if (!rival.equipoDerrotado()) {
+                    Ataque ataqueRival = defensor.getAtaques().get(0);
+                    String mensajeRival = ataqueRival.aplicarAtaque(defensor, atacante);
+                    vista.mostrarMensaje(mensajeRival);
+                    vista.mostrarEstadoPokemon(jugador.getNombre(), atacante);
+                }
+            }
+
+            if (jugador.equipoDerrotado()) {
+                vista.mostrarMensaje("\n🎉 ¡" + rival.getNombre() + " ha ganado la batalla! 🎉\n");
+            } else {
+                vista.mostrarMensaje("\n🎉 ¡" + jugador.getNombre() + " ha ganado la batalla! 🎉\n");
+            }
+
+            System.out.print("¿Deseas jugar otra vez? (s/n): ");
+            String respuesta = scanner.nextLine().trim().toLowerCase();
+            if (!respuesta.equals("s")) {
+                System.out.println("\n👋 ¡Gracias por jugar! Hasta luego.");
+                break;
+            }
+            System.out.println("\n========== Reiniciando la batalla ==========");
         }
-
-        System.out.println(entrenador.getNombre() + " ha recibido su equipo aleatorio:");
-        for (Pokemon p : entrenador.getEquipo()) {
-            System.out.println("- " + p.getNombre());
-        }
     }
-
 }
