@@ -33,9 +33,6 @@ public class Batalla {
     }
 
     public void realizarTurno(){
-        if (jugador.equipoDerrotado() && rival.equipoDerrotado()) {
-            return;
-        }
         if(turnoJugador){Pokemon pokemonActivoJuagador = jugador.obtenerPokemonActivo();
             Pokemon pokemonActivoRival = rival.obtenerPokemonActivo();
                 vista.mostrarMensaje("\n--- Estado actual ---");

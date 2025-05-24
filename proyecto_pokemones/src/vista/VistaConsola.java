@@ -8,7 +8,7 @@ import models.pokemones.Pokemon;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
+
 
 import controlador.Batalla;
 
@@ -43,9 +43,10 @@ public class VistaConsola implements Vista {
     public static void main(String[] args) {
         VistaConsola vista = new VistaConsola();
 
+        Pokemon[] disponibles = CreacionPokemones.obtenerPokemonesDisponibles();
+
         while (true) {
             Scanner scanner = new Scanner(System.in);
-            Pokemon[] disponibles = CreacionPokemones.obtenerPokemonesDisponibles();
 
             System.out.print("Ingresa el nombre del primer entrenador: ");
             Entrenador jugador = new Entrenador(scanner.nextLine());
@@ -53,11 +54,10 @@ public class VistaConsola implements Vista {
             System.out.print("Ingresa el nombre del segundo entrenador: ");
             Entrenador rival = new Entrenador(scanner.nextLine());
 
-            for (int i = 0; i < 3; i++) {
-                jugador.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[i]));
-                rival.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[i + 3]));
-            }
+            jugador.asignarEquipoAleatorio(disponibles);
+            rival.asignarEquipoAleatorio(disponibles);
 
+           
             Batalla batalla = new Batalla(jugador, rival, vista);
 
             vista.mostrarMensaje("\n¡-----------------Bienvenido a la batalla Pokémon--------------------\n");

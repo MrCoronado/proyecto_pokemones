@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+
 public class VistaGUI extends JFrame implements Vista {
     private JTextArea areaTexto;
     private JButton botonAtaque;
@@ -95,10 +96,9 @@ public class VistaGUI extends JFrame implements Vista {
         jugador = new Entrenador(nombrejugador);
         rival = new Entrenador(nombreRival);
         Pokemon[] disponibles = CreacionPokemones.obtenerPokemonesDisponibles();
-        for (int i = 0; i < 3; i++) {
-            jugador.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[i]));
-            rival.agregarPokemon(CreacionPokemones.crearNuevoPokemon(disponibles[i + 3]));
-        }
+        jugador.asignarEquipoAleatorio(disponibles);
+        rival.asignarEquipoAleatorio(disponibles);
+           
         batalla = new Batalla(jugador, rival, this);
         imagenJugador.setText(jugador.getNombre());
         imagenRival.setText(rival.getNombre());
@@ -130,15 +130,14 @@ public class VistaGUI extends JFrame implements Vista {
         String mensajeJugador = atacante.atacar(defensor, indiceAtaque);
         areaTexto.append(mensajeJugador + "\n");
 
-        barraSaludJugador.setValue(defensor.getPuntos_de_salud());
+        barraSaludRival.setValue(defensor.getPuntos_de_salud());
 
         if (!rival.equipoDerrotado()) {
-            Ataque ataqueRival = defensor.getAtaques().get(0);
-            String mensajeRival = ataqueRival.aplicarAtaque(defensor, atacante);
+            String mensajeRival = defensor.atacar(atacante, 0);
             areaTexto.append(mensajeRival + "\n");
         }
 
-        barraSaludRival.setValue(atacante.getPuntos_de_salud());
+        barraSaludJugador.setValue(atacante.getPuntos_de_salud());
 
         if (jugador.equipoDerrotado()) {
             areaTexto.append("¡" + rival.getNombre() + " gana la batalla!\n");
