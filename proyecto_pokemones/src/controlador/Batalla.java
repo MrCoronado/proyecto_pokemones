@@ -1,5 +1,7 @@
 package controlador;
 
+import java.util.Stack;
+
 import models.entrenadores.Entrenador;
 import models.pokemones.Pokemon;
 import vista.Vista;
@@ -41,12 +43,20 @@ public class Batalla {
     
                 if (pokemonActivoJuagador.getVelocidad() >= pokemonActivoRival.getVelocidad()) {
                     ejecutarTurno(jugador, pokemonActivoJuagador, pokemonActivoRival);
-                    if (pokemonActivoRival.getPuntos_de_salud() > 0) ejecutarTurno(rival, pokemonActivoRival, pokemonActivoJuagador);
+                    vista.mostrarEstadoPokemon(rival.getNombre(), rival.obtenerPokemonActivo());
+                    if (pokemonActivoRival.getPuntos_de_salud() > 0) {
+                        ejecutarTurno(rival, pokemonActivoRival, pokemonActivoJuagador);
+                        vista.mostrarEstadoPokemon(jugador.getNombre(), jugador.obtenerPokemonActivo());
+                    }
                 } else {
                     ejecutarTurno(rival, pokemonActivoRival, pokemonActivoJuagador);
-                    if (pokemonActivoJuagador.getPuntos_de_salud() > 0) ejecutarTurno(jugador, pokemonActivoJuagador, pokemonActivoRival);
+                    vista.mostrarEstadoPokemon(jugador.getNombre(), jugador.obtenerPokemonActivo());
+                    if (pokemonActivoJuagador.getPuntos_de_salud() > 0) {
+                        ejecutarTurno(jugador, pokemonActivoJuagador, pokemonActivoRival);
+                        vista.mostrarEstadoPokemon(rival.getNombre(), rival.obtenerPokemonActivo());
+                    }
                 }
-    
+                
                 if (pokemonActivoRival.getPuntos_de_salud() <= 0) {
                     vista.mostrarMensaje("\n" + pokemonActivoRival.getNombre() + " ha sido derrotado.");
                     rival.getEquipo().remove(pokemonActivoRival);
@@ -54,7 +64,7 @@ public class Batalla {
                         vista.mostrarMensaje(rival.getNombre() + " envía a su próximo Pokémon.");
                     }
                 }
-    
+
                 if (pokemonActivoJuagador.getPuntos_de_salud() <= 0) {
                     vista.mostrarMensaje("\n" + pokemonActivoJuagador.getNombre() + " ha sido derrotado.");
                     jugador.getEquipo().remove(pokemonActivoJuagador);
@@ -65,13 +75,12 @@ public class Batalla {
         
         }
 
-        if (jugador.equipoDerrotado()) {
-            vista.mostrarMensaje("\n¡" + rival.getNombre() + " gana la batalla!");
-        } else {
-            vista.mostrarMensaje("\n¡" + jugador.getNombre() + " gana la batalla!");
-        }
+                if (jugador.equipoDerrotado()) {
+                    vista.mostrarVictoria(rival.getNombre());
+                } else if (rival.equipoDerrotado()) {
+                    vista.mostrarVictoria(jugador.getNombre());
+                }
     }
-    
 
     private void ejecutarTurno(Entrenador entrenador, Pokemon atacante, Pokemon defensor) {
         int opcion = vista.pedirOpcionAtaque(atacante);
