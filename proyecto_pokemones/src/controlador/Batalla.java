@@ -1,7 +1,9 @@
 package controlador;
 
+import java.util.HashMap;
 import java.util.Stack;
 
+import models.HashPokemones;
 import models.ListaTurnos;
 import models.entrenadores.Entrenador;
 import models.pokemones.Pokemon;
@@ -15,6 +17,7 @@ public class Batalla {
     private boolean turnoJugador;
     private Stack<String> historialMovimientos = new Stack<>();
     private ListaTurnos listaTurnos = new ListaTurnos();
+    private HashPokemones hashPokemones = new HashPokemones();
 
     public Batalla(Entrenador jugador, Entrenador rival, Vista vista) {
         this.jugador = jugador;
@@ -32,6 +35,21 @@ public class Batalla {
         vista.mostrarMensaje("--- Estado inicial ---");
         vista.mostrarEstadoPokemon(jugador.getNombre(), p1);
         vista.mostrarEstadoPokemon(rival.getNombre(), p2);
+
+        cargarPokemonesEnHash();
+    }
+    
+    private void cargarPokemonesEnHash() {
+        for (Pokemon p : jugador.getEquipo()) {
+            hashPokemones.agregarPokemon(p);
+        }
+        for (Pokemon p : rival.getEquipo()) {
+            hashPokemones.agregarPokemon(p);
+        }
+    }
+
+    public Pokemon buscarPokemonPorNombre(String nombre) {
+        return hashPokemones.buscarPorNombre(nombre);
     }
 
     public void realizarTurno() {
