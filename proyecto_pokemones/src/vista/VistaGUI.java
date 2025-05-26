@@ -82,7 +82,7 @@ public class VistaGUI extends JFrame implements Vista {
         panelBotones.setLayout(new FlowLayout());
 
         botonAtaque = new JButton("Atacar");
-        botonAtaque.addActionListener((ActionEvent _) -> ejecutarTurno(0));
+        botonAtaque.addActionListener((ActionEvent _) -> batalla.realizarTurno());
         panelBotones.add(botonAtaque);
         add(panelBotones, BorderLayout.SOUTH);
 
@@ -118,45 +118,14 @@ public class VistaGUI extends JFrame implements Vista {
         batalla.iniciar();
     }
 
-    private void ejecutarTurno(int indiceAtaque) {
-        if (jugador.equipoDerrotado() || rival.equipoDerrotado()) {
-            areaTexto.append("❌ La batalla ha terminado.\n");
-            return;
-        }
-
-        Pokemon atacante = jugador.obtenerPokemonActivo();
-        Pokemon defensor = rival.obtenerPokemonActivo();
-
-        String mensajeJugador = atacante.atacar(defensor, indiceAtaque);
-        areaTexto.append(mensajeJugador + "\n");
-
-        barraSaludRival.setValue(defensor.getPuntos_de_salud());
-
-        if (!rival.equipoDerrotado()) {
-            String mensajeRival = defensor.atacar(atacante, 0);
-            areaTexto.append(mensajeRival + "\n");
-        }
-
-        barraSaludJugador.setValue(atacante.getPuntos_de_salud());
-
-        if (jugador.equipoDerrotado()) {
-            areaTexto.append("¡" + rival.getNombre() + " gana la batalla!\n");
-            JOptionPane.showMessageDialog(this,
-                    "🎉 ¡" + rival.getNombre() + " ha ganado la batalla! 🎉",
-                    "¡Victoria!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            preguntarReinicio();
-        } else if (rival.equipoDerrotado()) {
-            areaTexto.append("¡" + jugador.getNombre() + " gana la batalla!\n");
-            JOptionPane.showMessageDialog(this,
-                    "🎉 ¡" + jugador.getNombre() + " ha ganado la batalla! 🎉",
-                    "¡Victoria!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            preguntarReinicio();
-        }
-
-        actualizarBotonesAtaque();
-    }
+    public void mostrarVictoria(String nombreGanador) {
+    areaTexto.append("¡" + nombreGanador + " gana la batalla!\n");
+    JOptionPane.showMessageDialog(this,
+            "🎉 ¡" + nombreGanador + " ha ganado la batalla! 🎉",
+            "¡Victoria!",
+            JOptionPane.INFORMATION_MESSAGE);
+    preguntarReinicio();
+}
 
     private void preguntarReinicio() {
         int opcion = JOptionPane.showConfirmDialog(this,
@@ -174,23 +143,16 @@ public class VistaGUI extends JFrame implements Vista {
     }
 
     private void actualizarBotonesAtaque() {
-        Pokemon pokemonActivo = jugador.obtenerPokemonActivo();
-        if (pokemonActivo == null || pokemonActivo.getAtaques().isEmpty()) {
-            botonAtaque.setEnabled(false);
-            botonAtaque.setText("Sin ataque");
-        } else {
-            Ataque ataque = pokemonActivo.getAtaques().get(0);
-            botonAtaque.setEnabled(true);
-            botonAtaque.setText(ataque.getNombre());
-            botonAtaque.setBackground(Color.RED);
-            botonAtaque.setForeground(Color.WHITE);
-            botonAtaque.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 16));
-            botonAtaque.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-            botonAtaque.setPreferredSize(new Dimension(150, 50));
-            botonAtaque.setFocusPainted(false);
-            botonAtaque.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        }
-    }
+    botonAtaque.setEnabled(true);
+    botonAtaque.setText("Atacar");
+    botonAtaque.setBackground(Color.RED);
+    botonAtaque.setForeground(Color.WHITE);
+    botonAtaque.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 16));
+    botonAtaque.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+    botonAtaque.setPreferredSize(new Dimension(150, 50));
+    botonAtaque.setFocusPainted(false);
+    botonAtaque.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+}
 
     public void mostrarMensaje(String mensaje) {
         areaTexto.append(mensaje + "\n");
@@ -208,9 +170,18 @@ public class VistaGUI extends JFrame implements Vista {
     }
 
     public void mostrarEstadoPokemon(String nombreEntrenador, Pokemon pokemon) {
+        if (pokemon == null) return; 
+        
         areaTexto.append(nombreEntrenador + ": " + pokemon.getNombre() + " (HP: " + pokemon.getPuntos_de_salud() + ")\n");
-    }
 
+        if (nombreEntrenador.equals(jugador.getNombre())) {
+            barraSaludJugador.setValue(pokemon.getPuntos_de_salud());
+        } else {
+            barraSaludRival.setValue(pokemon.getPuntos_de_salud());
+        }
+
+        actualizarBotonesAtaque();
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             VistaGUI vista = new VistaGUI();
