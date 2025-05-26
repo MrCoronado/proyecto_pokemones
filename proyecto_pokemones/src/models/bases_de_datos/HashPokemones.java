@@ -1,4 +1,4 @@
-package models;
+package models.bases_de_datos;
 
 import java.util.HashMap;
 import models.pokemones.Pokemon;

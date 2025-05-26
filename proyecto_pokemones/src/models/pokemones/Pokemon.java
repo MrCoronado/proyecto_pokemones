@@ -35,6 +35,11 @@ public class Pokemon {
         this.velocidad = velocidad;
     }
 
+    //Constructor vacio para deserializar
+    public Pokemon() {
+        this.ataques = new ArrayList<>();
+    }
+
     public String toString(){
         return nombre + "(HP: " + puntos_de_salud + ", Tipo: " + tipo + ", Ataque: " + ataque + ", Defensa: " + defensa +
                 ", Ataque Especial: " + ataqueEspecial + ", Defensa Especial: " + defensaEspecial +
@@ -51,6 +56,7 @@ public class Pokemon {
     public void setAtaques(List<Ataque> ataques) { this.ataques = ataques; }
 
     public TipoPokemon getTipo() { return tipo; }
+    public void setTipo(TipoPokemon tipo) { this.tipo = tipo; }
 
     public int getAtaque() { return ataque; }
     public void setAtaque(int ataque) { this.ataque = ataque; }
@@ -136,6 +142,24 @@ public class Pokemon {
             return " No es muy efectivo..";
         }
         return "";
+    }
+
+    public String serializar() {
+    return nombre + "," + puntos_de_salud + "," + tipo + "," + ataque + "," + defensa + "," + ataqueEspecial + "," + defensaEspecial + "," + velocidad;
+}
+
+    public static Pokemon deserializar(String linea) {
+        String[] datos = linea.split(",");
+        Pokemon p = new Pokemon();
+        p.setNombre(datos[0]);
+        p.setPuntos_de_salud(Integer.parseInt(datos[1]));
+        p.setTipo(TipoPokemon.valueOf(datos[2]));
+        p.setAtaque(Integer.parseInt(datos[3]));
+        p.setDefensa(Integer.parseInt(datos[4]));
+        p.setAtaqueEspecial(Integer.parseInt(datos[5]));
+        p.setDefensaEspecial(Integer.parseInt(datos[6]));
+        p.setVelocidad(Integer.parseInt(datos[7]));
+        return p;
     }
     
 }

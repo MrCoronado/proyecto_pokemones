@@ -3,8 +3,8 @@ package controlador;
 import java.util.HashMap;
 import java.util.Stack;
 
-import models.HashPokemones;
-import models.ListaTurnos;
+import models.bases_de_datos.HashPokemones;
+import models.bases_de_datos.ListaTurnos;
 import models.entrenadores.Entrenador;
 import models.pokemones.Pokemon;
 import vista.Vista;
