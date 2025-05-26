@@ -66,6 +66,10 @@ public class Entrenador {
             }
         }
     }
+    // Verifica si el entrenador tiene un Pokémon específico en su equipo
+    public boolean tienePokemon(Pokemon p) {
+        return equipo.contains(p);
+    } 
 }
 
 
