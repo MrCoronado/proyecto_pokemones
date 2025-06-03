@@ -46,4 +46,39 @@ public class CreacionPokemones {
             original.getVelocidad()
         );
     }
+
+
+    public static void crearAtaquesPorDefecto(Pokemon p) {
+        List<Ataque> ataques = new ArrayList<>();
+
+        // Agregar ataques por defecto
+
+        switch (p.getTipo()) {
+            case FUEGO:
+                ataques.add(new Ataque("Lanzallamas", 10, "Especial", "Fuego"));
+                
+                break;
+        
+            case AGUA:
+                ataques.add(new Ataque("Hidrobomba", 10, "Especial", "Agua"));
+                break;
+            case PLANTA:
+                ataques.add(new Ataque("Látigo Cepa", 10, "Especial", "Planta"));
+                break;
+            case ELECTRICO:
+                ataques.add(new Ataque("Trueno", 10, "Especial", "Electrico"));
+                break;
+            case HIELO:
+                ataques.add(new Ataque("Rayo Hielo", 10, "Especial", "Hielo"));
+                break;
+            case TIERRA:
+                ataques.add(new Ataque("Terremoto", 10, "Especial", "Tierra"));
+                break;
+        }
+        // Asignar los ataques al Pokémon
+        p.setAtaques(ataques);
+        
+    }
+
+
 }

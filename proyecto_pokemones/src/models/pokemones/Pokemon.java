@@ -35,6 +35,11 @@ public class Pokemon {
         this.velocidad = velocidad;
     }
 
+    //Constructor vacio para deserializar
+    public Pokemon() {
+        this.ataques = new ArrayList<>();
+    }
+
     public String toString(){
         return nombre + "(HP: " + puntos_de_salud + ", Tipo: " + tipo + ", Ataque: " + ataque + ", Defensa: " + defensa +
                 ", Ataque Especial: " + ataqueEspecial + ", Defensa Especial: " + defensaEspecial +
@@ -51,6 +56,7 @@ public class Pokemon {
     public void setAtaques(List<Ataque> ataques) { this.ataques = ataques; }
 
     public TipoPokemon getTipo() { return tipo; }
+    public void setTipo(TipoPokemon tipo) { this.tipo = tipo; }
 
     public int getAtaque() { return ataque; }
     public void setAtaque(int ataque) { this.ataque = ataque; }
@@ -136,6 +142,31 @@ public class Pokemon {
             return " No es muy efectivo..";
         }
         return "";
+    }
+
+    public String serializar() {
+    return nombre + "," + puntos_de_salud + "," + tipo + "," + ataque + "," + defensa + "," + ataqueEspecial + "," + defensaEspecial + "," + velocidad;
+}
+
+    public static Pokemon deserializar(String linea) {
+        String[] datos = linea.split(",");
+        if (datos.length != 8) {
+            throw new IllegalArgumentException("Datos de Pokémon inválidos: " + linea);
+        }
+        
+        String nombre = datos[0];
+        int ps= Integer.parseInt(datos[1]);
+        String tipo = datos[2];
+        int ataque= Integer.parseInt(datos[3]);
+        int defensa= Integer.parseInt(datos[4]);
+        int ataqueEspecial= Integer.parseInt(datos[5]);
+        int defensaEspecial= Integer.parseInt(datos[6]);
+        int velocidad= Integer.parseInt(datos[7]);
+
+        Pokemon p = new Pokemon(nombre, ps, TipoPokemon.valueOf(tipo), new ArrayList<>(), ataque, defensa, ataqueEspecial, defensaEspecial, velocidad);
+
+        CreacionPokemones.crearAtaquesPorDefecto(p); // Asignar ataques por defecto al Pokémon deserializado
+        return p;
     }
     
 }
