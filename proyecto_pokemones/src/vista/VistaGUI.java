@@ -130,7 +130,7 @@ private void inicializarJuego(){
 
 
     areaTexto.setText("¡-----------------Bienvenido a la batalla Pokémon!--------------------\n");
-    areaTexto.append("Entrenador " + jugador.getNombre() + " 🆚 Entrenador " + rival.getNombre() + "\n");
+    areaTexto.append("Entrenador " + jugador.getNombre() + " vs Entrenador " + rival.getNombre() + "\n");
     areaTexto.append(nombrejugador + " Recibio su equipo: \n");
     for (Pokemon pokemon : jugador.getEquipo()) {
         areaTexto.append(pokemon.toString() + "\n");
