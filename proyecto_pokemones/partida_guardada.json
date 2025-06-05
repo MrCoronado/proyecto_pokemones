@@ -3,8 +3,26 @@
     "nombre": "mariana",
     "equipo": [
       {
-        "nombre": "Bulbasaur",
-        "puntos_de_salud": 86,
+        "nombre": "garchomp",
+        "puntos_de_salud": 70,
+        "tipo": "TIERRA",
+        "ataques": [
+          {
+            "nombre": "Terremoto",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Tierra"
+          }
+        ],
+        "ataque": 130,
+        "defensa": 95,
+        "ataqueEspecial": 80,
+        "defensaEspecial": 85,
+        "velocidad": 102
+      },
+      {
+        "nombre": "roselia",
+        "puntos_de_salud": 100,
         "tipo": "PLANTA",
         "ataques": [
           {
@@ -14,32 +32,14 @@
             "tipoAtaque": "Planta"
           }
         ],
-        "ataque": 49,
-        "defensa": 49,
-        "ataqueEspecial": 65,
-        "defensaEspecial": 65,
-        "velocidad": 45
+        "ataque": 60,
+        "defensa": 70,
+        "ataqueEspecial": 85,
+        "defensaEspecial": 75,
+        "velocidad": 50
       },
       {
-        "nombre": "Pikachu",
-        "puntos_de_salud": 100,
-        "tipo": "ELECTRICO",
-        "ataques": [
-          {
-            "nombre": "Trueno",
-            "dano": 10,
-            "tipoDanio": "Especial",
-            "tipoAtaque": "Electrico"
-          }
-        ],
-        "ataque": 55,
-        "defensa": 40,
-        "ataqueEspecial": 50,
-        "defensaEspecial": 50,
-        "velocidad": 90
-      },
-      {
-        "nombre": "Charmander",
+        "nombre": "charmander",
         "puntos_de_salud": 100,
         "tipo": "FUEGO",
         "ataques": [
@@ -59,28 +59,28 @@
     ]
   },
   {
-    "nombre": "ana",
+    "nombre": "rios",
     "equipo": [
       {
-        "nombre": "Charmander",
-        "puntos_de_salud": 90,
-        "tipo": "FUEGO",
+        "nombre": "garchomp",
+        "puntos_de_salud": 70,
+        "tipo": "TIERRA",
         "ataques": [
           {
-            "nombre": "Lanzallamas",
+            "nombre": "Terremoto",
             "dano": 10,
             "tipoDanio": "Especial",
-            "tipoAtaque": "Fuego"
+            "tipoAtaque": "Tierra"
           }
         ],
-        "ataque": 52,
-        "defensa": 43,
-        "ataqueEspecial": 60,
-        "defensaEspecial": 50,
-        "velocidad": 65
+        "ataque": 130,
+        "defensa": 95,
+        "ataqueEspecial": 80,
+        "defensaEspecial": 85,
+        "velocidad": 102
       },
       {
-        "nombre": "Pikachu",
+        "nombre": "pikachu",
         "puntos_de_salud": 100,
         "tipo": "ELECTRICO",
         "ataques": [
@@ -98,7 +98,7 @@
         "velocidad": 90
       },
       {
-        "nombre": "Bulbasaur",
+        "nombre": "bulbasaur",
         "puntos_de_salud": 100,
         "tipo": "PLANTA",
         "ataques": [
