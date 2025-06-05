@@ -1,7 +1,11 @@
 package controlador;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.List;
 
 import models.bases_de_datos.HashPokemones;
 import models.bases_de_datos.ListaTurnos;
@@ -129,4 +133,18 @@ public class Batalla {
             }
         }
     }
+
+    public List<String> mostrarPila(){
+        List<String> copia = new ArrayList<>(historialMovimientos);
+        Collections.reverse(copia);
+        return copia;
+    }
+
+
+
+
+
+
+
+
 }

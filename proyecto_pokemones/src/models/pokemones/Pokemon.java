@@ -150,15 +150,22 @@ public class Pokemon {
 
     public static Pokemon deserializar(String linea) {
         String[] datos = linea.split(",");
-        Pokemon p = new Pokemon();
-        p.setNombre(datos[0]);
-        p.setPuntos_de_salud(Integer.parseInt(datos[1]));
-        p.setTipo(TipoPokemon.valueOf(datos[2]));
-        p.setAtaque(Integer.parseInt(datos[3]));
-        p.setDefensa(Integer.parseInt(datos[4]));
-        p.setAtaqueEspecial(Integer.parseInt(datos[5]));
-        p.setDefensaEspecial(Integer.parseInt(datos[6]));
-        p.setVelocidad(Integer.parseInt(datos[7]));
+        if (datos.length != 8) {
+            throw new IllegalArgumentException("Datos de Pokémon inválidos: " + linea);
+        }
+        
+        String nombre = datos[0];
+        int ps= Integer.parseInt(datos[1]);
+        String tipo = datos[2];
+        int ataque= Integer.parseInt(datos[3]);
+        int defensa= Integer.parseInt(datos[4]);
+        int ataqueEspecial= Integer.parseInt(datos[5]);
+        int defensaEspecial= Integer.parseInt(datos[6]);
+        int velocidad= Integer.parseInt(datos[7]);
+
+        Pokemon p = new Pokemon(nombre, ps, TipoPokemon.valueOf(tipo), new ArrayList<>(), ataque, defensa, ataqueEspecial, defensaEspecial, velocidad);
+
+        CreacionPokemones.crearAtaquesPorDefecto(p); // Asignar ataques por defecto al Pokémon deserializado
         return p;
     }
     

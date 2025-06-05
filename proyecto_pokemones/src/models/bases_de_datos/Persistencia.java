@@ -5,8 +5,25 @@ import models.pokemones.Pokemon;
 
 import java.io.*;
 import java.util.List;
+import java.util.ArrayList;
 
 public class Persistencia {
+
+    private static final String ARCHIVO_POKEMONES = "src/models/bases_de_datos/pokemones.txt";
+
+    public static List<Pokemon> leerPokemones(){
+        List<Pokemon> lista = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_POKEMONES))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                Pokemon pokemon = Pokemon.deserializar(linea);
+                lista.add(pokemon);
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer archivo: " + e.getMessage());
+        }
+        return lista;
+    }
 
     public static void guardarEntrenador(Entrenador entrenador, String nombreArchivo) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) {

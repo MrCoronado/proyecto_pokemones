@@ -47,4 +47,18 @@ public class Ataque {
     public String toString() {
         return nombre + " (Tipo: " + tipoDanio + ", Daño: " + dano + ")";
     }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    public void setDano(int dano) {
+        this.dano = dano;
+    }
+    public void setTipoDanio(String tipoDanio) {
+        this.tipoDanio = tipoDanio;
+    }
+    public void setTipoAtaque(String tipoAtaque) {
+        this.tipoAtaque = tipoAtaque;
+    }
+
+    
 }
