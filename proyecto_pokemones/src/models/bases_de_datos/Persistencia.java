@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Persistencia {
 
-    private static final String ARCHIVO_POKEMONES = "src/models/bases_de_datos/pokemones.txt";
+    private static final String ARCHIVO_POKEMONES = "C:\\Users\\Victor Manuel\\proyecto_pokemones-2\\proyecto_pokemones\\src\\models\\bases_de_datos\\pokemones.txt";
 
     public static List<Pokemon> leerPokemones(){
         List<Pokemon> lista = new ArrayList<>();

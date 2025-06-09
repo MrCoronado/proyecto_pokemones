@@ -2,5 +2,7 @@
     "java.project.sourcePaths": [
         "proyecto_pokemones\\src"
     ],
-    "java.project.referencedLibraries": []
+    "java.project.referencedLibraries": [
+        "c:\\Users\\Victor Manuel\\Downloads\\gson-2.10.1.jar"
+    ]
 }

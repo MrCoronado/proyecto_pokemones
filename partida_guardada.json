@@ -1,0 +1,120 @@
+[
+  {
+    "nombre": "victor",
+    "equipo": [
+      {
+        "nombre": "pikachu",
+        "puntos_de_salud": 100,
+        "tipo": "ELECTRICO",
+        "ataques": [
+          {
+            "nombre": "Trueno",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Electrico"
+          }
+        ],
+        "ataque": 55,
+        "defensa": 40,
+        "ataqueEspecial": 50,
+        "defensaEspecial": 50,
+        "velocidad": 90
+      },
+      {
+        "nombre": "charmander",
+        "puntos_de_salud": 100,
+        "tipo": "FUEGO",
+        "ataques": [
+          {
+            "nombre": "Lanzallamas",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Fuego"
+          }
+        ],
+        "ataque": 52,
+        "defensa": 43,
+        "ataqueEspecial": 60,
+        "defensaEspecial": 50,
+        "velocidad": 65
+      },
+      {
+        "nombre": "garchomp",
+        "puntos_de_salud": 100,
+        "tipo": "TIERRA",
+        "ataques": [
+          {
+            "nombre": "Terremoto",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Tierra"
+          }
+        ],
+        "ataque": 130,
+        "defensa": 95,
+        "ataqueEspecial": 80,
+        "defensaEspecial": 85,
+        "velocidad": 102
+      }
+    ]
+  },
+  {
+    "nombre": "manuel",
+    "equipo": [
+      {
+        "nombre": "bulbasaur",
+        "puntos_de_salud": 100,
+        "tipo": "PLANTA",
+        "ataques": [
+          {
+            "nombre": "Látigo Cepa",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Planta"
+          }
+        ],
+        "ataque": 49,
+        "defensa": 49,
+        "ataqueEspecial": 65,
+        "defensaEspecial": 65,
+        "velocidad": 45
+      },
+      {
+        "nombre": "charmander",
+        "puntos_de_salud": 100,
+        "tipo": "FUEGO",
+        "ataques": [
+          {
+            "nombre": "Lanzallamas",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Fuego"
+          }
+        ],
+        "ataque": 52,
+        "defensa": 43,
+        "ataqueEspecial": 60,
+        "defensaEspecial": 50,
+        "velocidad": 65
+      },
+      {
+        "nombre": "roselia",
+        "puntos_de_salud": 100,
+        "tipo": "PLANTA",
+        "ataques": [
+          {
+            "nombre": "Látigo Cepa",
+            "dano": 10,
+            "tipoDanio": "Especial",
+            "tipoAtaque": "Planta"
+          }
+        ],
+        "ataque": 60,
+        "defensa": 70,
+        "ataqueEspecial": 85,
+        "defensaEspecial": 75,
+        "velocidad": 50
+      }
+    ]
+  }
+]
