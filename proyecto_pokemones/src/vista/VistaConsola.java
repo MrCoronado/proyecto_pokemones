@@ -7,6 +7,7 @@ import models.pokemones.Pokemon;
 import controlador.Batalla;
 import excepciones.ExcepcionDeEntrenador;
 import excepciones.ExcepcionAtaqueInvalido;
+import excepciones.ExcepcionRespuestaInvalida;
 
 import java.util.List;
 import java.util.Scanner;
@@ -158,8 +159,20 @@ public class VistaConsola implements Vista {
                 vista.mostrarVictoria(jugador.getNombre());
             }
 
-            System.out.print("¿Deseas jugar otra vez? (s/n): ");
-            String respuesta = scanner.nextLine().trim().toLowerCase();
+            String respuesta;
+            while (true) {
+                System.out.print("¿Deseas jugar otra vez? (s/n): ");
+                respuesta = scanner.nextLine().trim().toLowerCase();
+                try {
+                    if (!respuesta.equals("s") && !respuesta.equals("n")) {
+                        throw new ExcepcionRespuestaInvalida("❌ Respuesta inválida. Por favor ingresa 's' o 'n'.");
+                    }
+                    break;
+                } catch (ExcepcionRespuestaInvalida e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+
             if (!respuesta.equals("s")) {
                 System.out.println("\n👋 ¡Gracias por jugar! Hasta luego.");
                 break;
@@ -169,3 +182,4 @@ public class VistaConsola implements Vista {
         }
     }
 }
+
